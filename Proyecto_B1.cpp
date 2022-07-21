@@ -20,6 +20,7 @@ bool loadedRoom;
 room r;
 int NumTri = 0;
 source s;
+int N_RAYOS = 20;
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -43,7 +44,6 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-//Exercise 13
 //lighting
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
@@ -94,125 +94,111 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
-    //glEnable(GL_BLEND);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
-    //Exercise 13 Task 1
-    // build and compile our shader zprogram
-    // ------------------------------------
-    //Shader lightingShader("D:/Users/mlcon/2022-A/Modelos y Simulacion/proyectos/shaders/shader_exercise13t3_colors.vs", "D:/Users/mlcon/2022-A/Modelos y Simulacion/proyectos/shaders/shader_exercise13t3_colors.fs");
-    //Shader lightCubeShader("D:/Users/mlcon/2022-A/Modelos y Simulacion/proyectos/shaders/shader_exercise13_lightcube.vs", "D:/Users/mlcon/2022-A/Modelos y Simulacion/proyectos/shaders/shader_exercise13_lightcube.fs");
-   // Shader lightingShader("shader_1.vs", "shader_1.fs");
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
 
     Shader lightingShader("lightcube.vs", "lightcube.fs");
     Shader ico("lightcube.vs", "lightcube.fs");
     Shader rayo("lightcube.vs", "lightcube.fs");
 
+    //CARGAR SALA
     laodRoom();
 
-
     int numeroTriangulos = NumTri;
-    float vertices1[108];
+    float verticesSala[108];
     int contradork = 0;
-    float vertices2[180];
-    int contadorIco = 0;
+    
 
-
-
-
+    //ARREGLO DE VERTICES DE SALA
     for (int i = 0; i < r.NP; i++) {
         for (int j = 0; j < r.p[i].NT; j++) {
-            vertices1[contradork] = r.p[i].t[j].p0.x * 0.1;
+            verticesSala[contradork] = r.p[i].t[j].p0.x ;
             contradork++;
-            vertices1[contradork] = r.p[i].t[j].p0.y * 0.1;
+            verticesSala[contradork] = r.p[i].t[j].p0.y ;
             contradork++;
-            vertices1[contradork] = r.p[i].t[j].p0.z * 0.1;
-            contradork++;
-
-
-            vertices1[contradork] = r.p[i].t[j].p1.x * 0.1;
-            contradork++;
-            vertices1[contradork] = r.p[i].t[j].p1.y * 0.1;
-            contradork++;
-            vertices1[contradork] = r.p[i].t[j].p1.z * 0.1;
+            verticesSala[contradork] = r.p[i].t[j].p0.z ;
             contradork++;
 
 
-            vertices1[contradork] = r.p[i].t[j].p2.x * 0.1;
+            verticesSala[contradork] = r.p[i].t[j].p1.x ;
             contradork++;
-            vertices1[contradork] = r.p[i].t[j].p2.y * 0.1;
+            verticesSala[contradork] = r.p[i].t[j].p1.y ;
             contradork++;
-            vertices1[contradork] = r.p[i].t[j].p2.z * 0.1;
+            verticesSala[contradork] = r.p[i].t[j].p1.z ;
+            contradork++;
+
+
+            verticesSala[contradork] = r.p[i].t[j].p2.x;
+            contradork++;
+            verticesSala[contradork] = r.p[i].t[j].p2.y;
+            contradork++;
+            verticesSala[contradork] = r.p[i].t[j].p2.z;
             contradork++;
 
         }
     }
 
 
-    contadorIco = 0;
+    //ARREGLO DE VERTICES DE FUENTE (ICOSAEDRO)
+    float verticesFuente[180];
+    int contFuente = 0;
     for (int i = 0; i < 20; i++) {
-        vertices2[contadorIco] = s.IcoFace[i].p0.x * 0.1;
-        contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[i].p0.y * 0.1;
-        contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[i].p0.z * 0.1;
-        contadorIco++;
+
+        verticesFuente[contFuente] = s.IcoFace[i].p0.x;
+        contFuente++;
 
 
-        vertices2[contadorIco] = s.IcoFace[i].p1.x * 0.1;
-        contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[i].p1.y * 0.1;
-        contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[i].p1.z * 0.1;
-        contadorIco++;
+        verticesFuente[contFuente] = s.IcoFace[i].p0.y;
+        contFuente++;
 
 
-        vertices2[contadorIco] = s.IcoFace[i].p2.x * 0.1;
-        contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[i].p2.y * 0.1;
-        contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[i].p2.z * 0.1;
-        contadorIco++;
+        verticesFuente[contFuente] = s.IcoFace[i].p0.z;
+        contFuente++;
+
+
+        verticesFuente[contFuente] = s.IcoFace[i].p1.x;
+        contFuente++;
+
+        verticesFuente[contFuente] = s.IcoFace[i].p1.y;
+        contFuente++;
+
+
+        verticesFuente[contFuente] = s.IcoFace[i].p1.z;
+        contFuente++;
+
+
+        verticesFuente[contFuente] = s.IcoFace[i].p2.x;
+        contFuente++;
+
+
+        verticesFuente[contFuente] = s.IcoFace[i].p2.y;
+        contFuente++;
+
+        verticesFuente[contFuente] = s.IcoFace[i].p2.z;
+        contFuente++;
 
 
     }
-    point p;
 
+    //NUMERO DE RAYOS
+    s.createRays(N_RAYOS);
 
-    s.createRays(20);
-    r.RayTracing(p, s.Rays, s.NRAYS);
+    //REFLEXIONES
+    reflection* reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS);
 
-    /*for (int i = 0; i < 20; i++) {
-        printf("Rayos: x: %f, y: %f, z: %f\n", s.Rays[i].x, s.Rays[i].y, s.Rays[i].z);
-    }*/
+    int idRayo = 0;
+    int nPunto = 0;
 
-    point o;
+    // PUNTO DE PARTIDA
+    point inicio;
+    inicio.x = reflexiones[idRayo].r[nPunto].x;
+    inicio.y = reflexiones[idRayo].r[nPunto].y;
+    inicio.z = reflexiones[idRayo].r[nPunto].z;
 
-    reflection* arrayreflecciones;
-
-    arrayreflecciones = r.RayTracing(o, s.Rays, s.NRAYS);
-
-    for (int i = 0; i < 200; i++) {
-        printf("punto de golpe: x: %f, y: %f, z: %f\n", arrayreflecciones[1].r[i].x, arrayreflecciones[1].r[i].y, arrayreflecciones[1].r[i].z);
-    }
-
-    reflection arrayDePuntosDeChoque = arrayreflecciones[1];
-
-
-    point puntoDePrueba;
-
-    point puntoDeOrigen;
-
-    puntoDeOrigen.x = arrayreflecciones[1].r[0].x * 0.1;
-    puntoDeOrigen.y = arrayreflecciones[1].r[0].y * 0.1;
-    puntoDeOrigen.z = arrayreflecciones[1].r[0].z * 0.1;
-
-    puntoDePrueba.x = arrayreflecciones[1].r[1].x * 0.1;
-    puntoDePrueba.y = arrayreflecciones[1].r[1].y * 0.1;
-    puntoDePrueba.z = arrayreflecciones[1].r[1].z * 0.1;
+    nPunto++;
+    // PUNTO DE LLEGADA
+    point llegada;
+    llegada.x = reflexiones[idRayo].r[nPunto].x;
+    llegada.y = reflexiones[idRayo].r[nPunto].y;
+    llegada.z = reflexiones[idRayo].r[nPunto].z;
 
 
 
@@ -226,7 +212,7 @@ int main()
     glGenBuffers(1, &VBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesSala), verticesSala, GL_STATIC_DRAW);
 
 
     glBindVertexArray(cubeVAO);
@@ -241,7 +227,7 @@ int main()
     glGenBuffers(1, &VBO2);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesFuente), verticesFuente, GL_STATIC_DRAW);
 
 
     glBindVertexArray(cubeVAO2);
@@ -256,7 +242,7 @@ int main()
     glGenBuffers(1, &VBO3);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO3);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesSala), verticesSala, GL_STATIC_DRAW);
 
 
     glBindVertexArray(cubeVAO3);
@@ -266,12 +252,6 @@ int main()
     glEnableVertexAttribArray(0);
 
 
-
-
-    //Exercise 13 Task 2
-    //glVertexAttribPointer(1, 0, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(3 * sizeof(float)));
-    //glEnableVertexAttribArray(1);
-
     // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
     unsigned int lightCubeVAO;
     glGenVertexArrays(1, &lightCubeVAO);
@@ -279,11 +259,20 @@ int main()
     double tiempo1 = 0;
     int contadorTemporal = 0;
 
+    double tiempo = 0.0;
+    double tiempoAux = 0.0;
+    double distancia = 0.0;
+    double distanciaAux = 0.0;
+    double velocidad = 3.0;
+    double velocidadAux = velocidad;
+
 
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
     {
+
+
         // per-frame time logic
        // --------------------
         float currentFrame = glfwGetTime();
@@ -324,7 +313,7 @@ int main()
 
         // render the cube
         glBindVertexArray(cubeVAO);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
@@ -356,31 +345,53 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 60);
 
 
-        rayo.use();
-        rayo.setMat4("projection", projection);
-        rayo.setMat4("view", view);
-        rayo.setVec3("objectColor", 1.0f, 1.0f, 1.0f);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(puntoDeOrigen.x + ((puntoDePrueba.x) * (glfwGetTime() - tiempo1) * 0.05), puntoDeOrigen.y + ((puntoDePrueba.y) * (glfwGetTime() - tiempo1) * 0.05), puntoDeOrigen.z + ((puntoDePrueba.z) * (glfwGetTime() - tiempo1) * 0.05)));
+        //CALCULO DE TRAYECTORIAS Y ANIMACION
+        tiempo = glfwGetTime() - tiempoAux;
+        distancia = inicio.distancia(llegada);
+        distanciaAux = tiempo * velocidad;
 
-        if ((puntoDeOrigen.distancia(puntoDePrueba) * (glfwGetTime() - tiempo1) * SPEED) >= puntoDeOrigen.distancia(puntoDePrueba)) {
+        if (distanciaAux >= distancia) {
+            inicio = llegada;
+            nPunto++;
+            inicio.x = reflexiones[idRayo].r[nPunto].x;
+            inicio.y = reflexiones[idRayo].r[nPunto].y;
+            inicio.z = reflexiones[idRayo].r[nPunto].z;
+            tiempoAux = glfwGetTime();
+            cout << "Distancia rebasada: " << distanciaAux << endl;
+        }
+
+        velocidadAux = velocidad / distancia;
+        Vector vecDistancia = llegada.restaPuntos(inicio);
+        Vector vecTraslacion = vecDistancia * tiempo * velocidadAux;
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(inicio.x + vecTraslacion.x, inicio.y + vecTraslacion.y, inicio.z + vecTraslacion.z));
+        model = glm::scale(model, glm::vec3(0.05f)); // a smaller cube
+        
+
+        rayo.use();
+        rayo.setMat4("model", model);
+        rayo.setMat4("projection", projection);   
+        rayo.setVec3("objectColor", 1.0f, 1.0f, 1.0f);
+        rayo.setMat4("view", view);
+        
+        /*if ((inicio.distancia(llegada) * (glfwGetTime() - tiempo1) * SPEED) >= inicio.distancia(llegada)) {
 
             tiempo1 = glfwGetTime();
-            puntoDeOrigen = puntoDePrueba;
+            inicio = llegada;
 
             contadorTemporal++;
-            puntoDePrueba.x = arrayreflecciones[1].r[contadorTemporal].x * 0.1;
-            puntoDePrueba.y = arrayreflecciones[1].r[contadorTemporal].y * 0.1;
-            puntoDePrueba.z = arrayreflecciones[1].r[contadorTemporal].z * 0.1;
+            llegada.x = arrayreflecciones[1].r[contadorTemporal].x * 0.1;
+            llegada.y = arrayreflecciones[1].r[contadorTemporal].y * 0.1;
+            llegada.z = arrayreflecciones[1].r[contadorTemporal].z * 0.1;
         };
 
-        model = glm::translate(model, glm::vec3(puntoDeOrigen.x + ((puntoDePrueba.x - puntoDeOrigen.x)) * (glfwGetTime() - tiempo1) * SPEED, puntoDeOrigen.y + ((puntoDePrueba.y - puntoDeOrigen.y)) * (glfwGetTime() - tiempo1) * SPEED, puntoDeOrigen.z + ((puntoDePrueba.z - puntoDeOrigen.z) * (glfwGetTime() - tiempo1)) * SPEED));
+        model = glm::translate(model, glm::vec3(inicio.x + ((llegada.x - inicio.x)) * (glfwGetTime() - tiempo1) * SPEED, inicio.y + ((llegada.y - inicio.y)) * (glfwGetTime() - tiempo1) * SPEED, inicio.z + ((llegada.z - inicio.z) * (glfwGetTime() - tiempo1)) * SPEED));
+        */
 
-
-        model = glm::scale(model, glm::vec3(0.01f)); // a smaller cube
-        rayo.setMat4("model", model);
+        
 
         glBindVertexArray(cubeVAO3);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
         glDrawArrays(GL_TRIANGLES, 0, 60);
 
 
@@ -466,149 +477,104 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 void laodRoom() {
     if (!loadedRoom) {
-        int nDivTri;
-        nDivTri = 2;
-        r.NewPlanes(6);// Genearra 6 planos
-        //square back
-        r.p[0].NewPoints(4);// Gnererar los 4 puntos
 
+        r.NewPlanes(6);
+        //-------------square 1 back
+        r.p[0].NewPoints(4);
         r.p[0].p[0].x = -2.0f;
         r.p[0].p[0].y = 2.0f;
         r.p[0].p[0].z = 2.0f;
-
         r.p[0].p[1].x = -2.0f;
         r.p[0].p[1].y = -2.0f;
         r.p[0].p[1].z = 2.0f;
-
         r.p[0].p[2].x = -2.0f;
         r.p[0].p[2].y = -2.0f;
         r.p[0].p[2].z = -2.0f;
-
         r.p[0].p[3].x = -2.0f;
         r.p[0].p[3].y = 2.0f;
         r.p[0].p[3].z = -2.0f;
-
         r.p[0].PointGenTriangle();
 
-
-
-        //square front
-        r.p[1].NewPoints(4);// Gnererar los 4 puntos
-
+        //-------------square 2 front
+        r.p[1].NewPoints(4);
         r.p[1].p[0].x = 2.0f;
         r.p[1].p[0].y = 2.0f;
         r.p[1].p[0].z = 2.0f;
-
         r.p[1].p[1].x = 2.0f;
-        r.p[1].p[1].y = 2.0f;
-        r.p[1].p[1].z = -2.0f;
-
+        r.p[1].p[1].y = -2.0f;
+        r.p[1].p[1].z = 2.0f;
         r.p[1].p[2].x = 2.0f;
         r.p[1].p[2].y = -2.0f;
         r.p[1].p[2].z = -2.0f;
-
         r.p[1].p[3].x = 2.0f;
-        r.p[1].p[3].y = -2.0f;
-        r.p[1].p[3].z = 2.0f;
-
+        r.p[1].p[3].y = 2.0f;
+        r.p[1].p[3].z = -2.0f;
         r.p[1].PointGenTriangle();
 
-        //square left
+        //-------------square 3 left
         r.p[2].NewPoints(4);
-
         r.p[2].p[0].x = -2.0f;
         r.p[2].p[0].y = -2.0f;
         r.p[2].p[0].z = 2.0f;
-
         r.p[2].p[1].x = 2.0f;
         r.p[2].p[1].y = -2.0f;
         r.p[2].p[1].z = 2.0f;
-
         r.p[2].p[2].x = 2.0f;
         r.p[2].p[2].y = -2.0f;
         r.p[2].p[2].z = -2.0f;
-
         r.p[2].p[3].x = -2.0f;
         r.p[2].p[3].y = -2.0f;
         r.p[2].p[3].z = -2.0f;
         r.p[2].PointGenTriangle();
 
-        //square right
-        r.p[3].NewPoints(4);// Gnererar los 4 puntos
-
+        //-------------square 4 right
+        r.p[3].NewPoints(4);
         r.p[3].p[0].x = 2.0f;
         r.p[3].p[0].y = 2.0f;
         r.p[3].p[0].z = 2.0f;
-
         r.p[3].p[1].x = -2.0f;
         r.p[3].p[1].y = 2.0f;
         r.p[3].p[1].z = 2.0f;
-
         r.p[3].p[2].x = -2.0f;
         r.p[3].p[2].y = 2.0f;
         r.p[3].p[2].z = -2.0f;
-
         r.p[3].p[3].x = 2.0f;
         r.p[3].p[3].y = 2.0f;
         r.p[3].p[3].z = -2.0f;
         r.p[3].PointGenTriangle();
 
-
-        //square top
+        //-------------square 5 top
         r.p[4].NewPoints(4);
-
         r.p[4].p[0].x = -2.0f;
         r.p[4].p[0].y = -2.0f;
         r.p[4].p[0].z = 2.0f;
-
         r.p[4].p[1].x = -2.0f;
         r.p[4].p[1].y = 2.0f;
         r.p[4].p[1].z = 2.0f;
-
         r.p[4].p[2].x = 2.0f;
         r.p[4].p[2].y = 2.0f;
         r.p[4].p[2].z = 2.0f;
-
         r.p[4].p[3].x = 2.0f;
         r.p[4].p[3].y = -2.0f;
         r.p[4].p[3].z = 2.0f;
         r.p[4].PointGenTriangle();
 
-        //square bottom
+        //-------------square 1 bottom
         r.p[5].NewPoints(4);
-
         r.p[5].p[0].x = -2.0f;
         r.p[5].p[0].y = 2.0f;
         r.p[5].p[0].z = -2.0f;
-
         r.p[5].p[1].x = -2.0f;
         r.p[5].p[1].y = -2.0f;
         r.p[5].p[1].z = -2.0f;
-
         r.p[5].p[2].x = 2.0f;
         r.p[5].p[2].y = -2.0f;
         r.p[5].p[2].z = -2.0f;
-
         r.p[5].p[3].x = 2.0f;
         r.p[5].p[3].y = 2.0f;
         r.p[5].p[3].z = -2.0f;
         r.p[5].PointGenTriangle();
 
-        /*
-        for (int i = 0; i < 6;i++) {
-            printf("+++++++++++++++++++++++++++++\n");
-            printf("Plano%d\n", i + 1);
-            for (int j = 0; j < 2;j++) {
-                printf("Punto 1\n");
-                printf("x: %f, y: %f, z: %f \n", r.p[i].t[j].p0.x, r.p[i].t[j].p0.y, r.p[i].t[j].p0.z);
-                printf("Punto 2\n");
-                printf("x: %f, y: %f, z: %f \n", r.p[i].t[j].p1.x, r.p[i].t[j].p1.y, r.p[i].t[j].p1.z);
-                printf("Punto 3\n");
-                printf("x: %f, y: %f, z: %f \n", r.p[i].t[j].p2.x, r.p[i].t[j].p2.y, r.p[i].t[j].p2.z);
-            }
-            printf("+++++++++++++++++++++++++++++\n");
-        }
-        */
 
         //Calcular los normales del plano
         int cont_t = 0;
