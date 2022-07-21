@@ -1462,4 +1462,32 @@ public:
     };
 };
 //---------------------------------------------------------------------------
+inline double Module(Vector v) { //JFLN: Returns the vector's module
+    double m;
+    m = sqrt(v * v);
+    return m;
+}
+//---------------------------------------------------------------------------
+inline Vector VectorUnitario(Vector v1) { //JFLN: Returns the vector's unitary vector
+    double m;
+    Vector v2;
+    m = Module(v1);
+    if (m == 0)
+        v2 = 0;
+    else
+        v2 = v1 / m;
+    return v2;
+}
+
+inline Vector TriangleNormal(triangle t) {
+    Vector n;
+    n = VectorUnitario((t.p1 - t.p0) / (t.p2 - t.p0));
+    return n;
+};
+
+inline Vector NormalPlano(plane p) {
+    Vector n;
+    n = VectorUnitario((p.p[1] - p.p[0]) / (p.p[2] - p.p[0]));
+    return n;
+}
 #endif
