@@ -33,17 +33,19 @@ const int n_div = 8;
 GLfloat vertices[108];
 
 // Coordinación de Vertices coordinates
-GLfloat vertices2[180];
+GLfloat verticesFuente[180];
 
 // Indices for vertices order
 GLuint indices[108];
 
 
-GLuint indices2[180];
+GLuint indicesFuente[180];
 
 
 int main()
 {
+
+	//Declaracion de la sala
 	room r;
 	r.NewPlanes(6);
 	//-------------square 1 back
@@ -195,6 +197,51 @@ int main()
 		}
 	}
 
+	//Declaracion de la fuente
+	source s;
+	int contFuente = 0;
+	int contCaraIco = 0;
+	for (int i = 0; i < 20; i++) {
+		indicesFuente[contFuente] = contFuente;
+		verticesFuente[contFuente] = s.IcoFace[i].p0.x;
+		contFuente++;
+
+		indicesFuente[contFuente] = contFuente;
+		verticesFuente[contFuente] = s.IcoFace[i].p0.y;
+		contFuente++;
+
+		indicesFuente[contFuente] = contFuente;
+		verticesFuente[contFuente] = s.IcoFace[i].p0.z;
+		contFuente++;
+
+
+		indicesFuente[contFuente] = contFuente;
+		verticesFuente[contFuente] = s.IcoFace[i].p1.x;
+		contFuente++;
+
+		indicesFuente[contFuente] = contFuente;
+		verticesFuente[contFuente] = s.IcoFace[i].p1.y;
+		contFuente++;
+
+		indicesFuente[contFuente] = contFuente;
+		verticesFuente[contFuente] = s.IcoFace[i].p1.z;
+		contFuente++;
+
+
+		indicesFuente[contFuente] = contFuente;
+		verticesFuente[contFuente] = s.IcoFace[i].p2.x;
+		contFuente++;
+
+		indicesFuente[contFuente] = contFuente;
+		verticesFuente[contFuente] = s.IcoFace[i].p2.y;
+		contFuente++;
+
+		indicesFuente[contFuente] = contFuente;
+		verticesFuente[contFuente] = s.IcoFace[i].p2.z;
+		contFuente++;
+
+	}
+
 
 
 	// Initializar GLFW
@@ -246,6 +293,23 @@ int main()
 	VBO1.Unbind();
 	EBO1.Unbind();
 
+	// Generar Vertex Array Object y vincularlos
+	VAO VAO2;
+	VAO2.Bind();
+
+	// Generar un objeto de búfer de vértices y vincularlo a los vértices
+	VBO VBO2(verticesFuente, sizeof(verticesFuente));
+	// Generar un  objeto de búfer de elemento y vincularlo a los índices
+	EBO EBO2(indicesFuente, sizeof(indicesFuente));
+
+	// Vincula atributos de VBO como coordenadas y colores a VAO
+	VAO2.LinkAttrib(VBO2, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+	//VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	// Unbind all to prevent accidentally modifying them
+	VAO2.Unbind();
+	VBO2.Unbind();
+	EBO2.Unbind();
+
 
 
 
@@ -277,6 +341,12 @@ int main()
 		// Draw primitives, number of indices, datatype of indices, index of indices
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
+
+
+		VAO2.Bind();
+		// Draw primitives, number of indices, datatype of indices, index of indices
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glDrawElements(GL_TRIANGLES, sizeof(indicesFuente) / sizeof(int), GL_UNSIGNED_INT, 0);
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
 		// Take care of all GLFW events
