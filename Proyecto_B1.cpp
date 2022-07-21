@@ -25,7 +25,7 @@ using namespace std;
 const unsigned int width = 800;
 const unsigned int height = 800;
 
-const int n_div = 8;
+const int N_RAYOS = 10;
 
 
 
@@ -199,8 +199,10 @@ int main()
 
 	//Declaracion de la fuente
 	source s;
+	
+	
+
 	int contFuente = 0;
-	int contCaraIco = 0;
 	for (int i = 0; i < 20; i++) {
 		indicesFuente[contFuente] = contFuente;
 		verticesFuente[contFuente] = s.IcoFace[i].p0.x;
@@ -241,6 +243,30 @@ int main()
 		contFuente++;
 
 	}
+
+	//NUMERO DE RAYOS
+	s.createRays(N_RAYOS);
+
+	//REFLEXIONES
+	reflection* reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS);
+
+	int idRayo = 0;
+	int nPunto = 0;
+
+	// PUNTO DE PARTIDA
+	point inicio;
+	inicio.x = reflexiones[idRayo].r[nPunto].x;
+	inicio.y = reflexiones[idRayo].r[nPunto].y;
+	inicio.z = reflexiones[idRayo].r[nPunto].z;
+
+	nPunto++;
+	// PUNTO DE LLEGADA
+	point llegada;
+	llegada.x = reflexiones[idRayo].r[nPunto].x;
+	llegada.y = reflexiones[idRayo].r[nPunto].y;
+	llegada.z = reflexiones[idRayo].r[nPunto].z;
+
+
 
 
 
@@ -319,11 +345,41 @@ int main()
 	// Creates camera object
 	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
+	double tiempo = 0.0;
+	double tiempoAux = 0.0;
+	double distancia = 0.0;
+	double distanciaAux = 0.0;
+	double velocidad = 0.5;
+	double velocidadAux = 0.5;
+
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
+		//CALCULO DE TRAYECTORIAS Y ANIMACION
+		tiempo = glfwGetTime() - tiempoAux;
+		distancia = inicio.distancia(llegada);
+		distanciaAux = tiempo * velocidad;
+
+		if (distanciaAux >= distancia) {
+			inicio = llegada;
+			nPunto++;
+			inicio.x = reflexiones[idRayo].r[nPunto].x;
+			inicio.y = reflexiones[idRayo].r[nPunto].y;
+			inicio.z = reflexiones[idRayo].r[nPunto].z;
+			tiempoAux = glfwGetTime();
+		}
+
+		velocidadAux = velocidad / distancia;
+		Vector vecDistancia = llegada.restaPuntos(inicio);
+		Vector vecTraslacion = vecDistancia * tiempo * velocidadAux;
+
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(inicio.x+vecTraslacion.x, inicio.z + vecTraslacion.z, inicio.z + vecTraslacion.z));
+
+
 		// Specify the color of the background
-		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+		//glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// Tell OpenGL which Shader Program we want to use
