@@ -27,7 +27,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
-void laodRoom();
+void cargarSala();
 
 
 // settings
@@ -63,7 +63,7 @@ int main()
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Proyecto Modelos y Simulacion", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Proyecto B1 - Modelos y Simulacion", NULL, NULL);
     // Check si falla al crear
     if (window == NULL)
     {
@@ -95,43 +95,43 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
 
-    Shader lightingShader("lightcube.vs", "lightcube.fs");
-    Shader ico("lightcube.vs", "lightcube.fs");
-    Shader rayo("lightcube.vs", "lightcube.fs");
+    Shader sala("lightcube.vs", "lightcube.fs");
+    Shader fuente("lightcube.vs", "lightcube.fs");
+    Shader particula("lightcube.vs", "lightcube.fs");
 
     //CARGAR SALA
-    laodRoom();
+    cargarSala();
 
     int numeroTriangulos = NumTri;
     float verticesSala[108];
-    int contradork = 0;
+    int contSala = 0;
     
 
     //ARREGLO DE VERTICES DE SALA
     for (int i = 0; i < r.NP; i++) {
         for (int j = 0; j < r.p[i].NT; j++) {
-            verticesSala[contradork] = r.p[i].t[j].p0.x ;
-            contradork++;
-            verticesSala[contradork] = r.p[i].t[j].p0.y ;
-            contradork++;
-            verticesSala[contradork] = r.p[i].t[j].p0.z ;
-            contradork++;
+            verticesSala[contSala] = r.p[i].t[j].p0.x ;
+            contSala++;
+            verticesSala[contSala] = r.p[i].t[j].p0.y ;
+            contSala++;
+            verticesSala[contSala] = r.p[i].t[j].p0.z ;
+            contSala++;
 
 
-            verticesSala[contradork] = r.p[i].t[j].p1.x ;
-            contradork++;
-            verticesSala[contradork] = r.p[i].t[j].p1.y ;
-            contradork++;
-            verticesSala[contradork] = r.p[i].t[j].p1.z ;
-            contradork++;
+            verticesSala[contSala] = r.p[i].t[j].p1.x ;
+            contSala++;
+            verticesSala[contSala] = r.p[i].t[j].p1.y ;
+            contSala++;
+            verticesSala[contSala] = r.p[i].t[j].p1.z ;
+            contSala++;
 
 
-            verticesSala[contradork] = r.p[i].t[j].p2.x;
-            contradork++;
-            verticesSala[contradork] = r.p[i].t[j].p2.y;
-            contradork++;
-            verticesSala[contradork] = r.p[i].t[j].p2.z;
-            contradork++;
+            verticesSala[contSala] = r.p[i].t[j].p2.x;
+            contSala++;
+            verticesSala[contSala] = r.p[i].t[j].p2.y;
+            contSala++;
+            verticesSala[contSala] = r.p[i].t[j].p2.z;
+            contSala++;
 
         }
     }
@@ -203,61 +203,50 @@ int main()
 
 
 
+    // Configuración de VBO y VAO para SALA
+    unsigned int salaVBO, salaVAO;
+    glGenVertexArrays(1, &salaVAO);
+    glGenBuffers(1, &salaVBO);
 
-
-
-    // first, configure the cube's VAO (and VBO)
-    unsigned int VBO, cubeVAO;
-    glGenVertexArrays(1, &cubeVAO);
-    glGenBuffers(1, &VBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, salaVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(verticesSala), verticesSala, GL_STATIC_DRAW);
 
 
-    glBindVertexArray(cubeVAO);
+    glBindVertexArray(salaVAO);
 
-    // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
 
-    unsigned int VBO2, cubeVAO2;
-    glGenVertexArrays(1, &cubeVAO2);
-    glGenBuffers(1, &VBO2);
+    // Configuración de VBO y VAO para FUENTE
+    unsigned int fuenteVBO, fuenteVAO;
+    glGenVertexArrays(1, &fuenteVAO);
+    glGenBuffers(1, &fuenteVBO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+    glBindBuffer(GL_ARRAY_BUFFER, fuenteVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(verticesFuente), verticesFuente, GL_STATIC_DRAW);
 
 
-    glBindVertexArray(cubeVAO2);
+    glBindVertexArray(fuenteVAO);
 
-    // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
 
-    unsigned int VBO3, cubeVAO3;
-    glGenVertexArrays(1, &cubeVAO3);
-    glGenBuffers(1, &VBO3);
+    // Configuración de VBO y VAO para PARTICULA
+    unsigned int particulaVBO, particulaVAO;
+    glGenVertexArrays(1, &particulaVAO);
+    glGenBuffers(1, &particulaVBO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO3);
+    glBindBuffer(GL_ARRAY_BUFFER, particulaVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(verticesSala), verticesSala, GL_STATIC_DRAW);
 
 
-    glBindVertexArray(cubeVAO3);
+    glBindVertexArray(particulaVAO);
 
-    // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-
-    // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
-    unsigned int lightCubeVAO;
-    glGenVertexArrays(1, &lightCubeVAO);
-    glBindVertexArray(lightCubeVAO);
-    double tiempo1 = 0;
-    int contadorTemporal = 0;
 
     double tiempo = 0.0;
     double tiempoAux = 0.0;
@@ -288,127 +277,108 @@ int main()
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // be sure to activate shader when setting uniforms/drawing objects
-        lightingShader.use();
-        lightingShader.setVec3("objectColor", 1.0f, 1.0f, 1.0f);
-        lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-
-        //Exercise 13 Task 2
-        lightingShader.setVec3("lightPos", lightPos);
-
-        //Exercise 13 Task 3
-        lightingShader.setVec3("viewPos", camera.Position);
-
-        // view/projection transformations
+        //DIBUJAR LA SALA
+        sala.use();
+        sala.setVec3("objectColor", 1.0f, 1.0f, 1.0f);
+        sala.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        sala.setVec3("lightPos", lightPos);
+        sala.setVec3("viewPos", camera.Position);
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
-
-
-        lightingShader.setMat4("projection", projection);
-        lightingShader.setMat4("view", view);
-
-        // world transformation
+        sala.setMat4("projection", projection);
+        sala.setMat4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
-        lightingShader.setMat4("model", model);
+        sala.setMat4("model", model);
 
-        // render the cube
-        glBindVertexArray(cubeVAO);
+        glBindVertexArray(salaVAO);
         glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
-        ico.use();
-        ico.setVec3("objectColor", 1.0f, 0.0f, 0.0f);
-        ico.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-
-        //Exercise 13 Task 2
-        ico.setVec3("lightPos", lightPos);
-
-        //Exercise 13 Task 3
-        ico.setVec3("viewPos", camera.Position);
-
-        // view/projection transformations
+        //DIBUJAR LA FUENTE
+        fuente.use();
+        fuente.setVec3("objectColor", 1.0f, 1.0f, 0.0f);
+        fuente.setVec3("lightColor", 1.0f, 1.0f, 0.0f);
+        fuente.setVec3("lightPos", lightPos);
+        fuente.setVec3("viewPos", camera.Position);
         glm::mat4 projection2 = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view2 = camera.GetViewMatrix();
-
-
-        ico.setMat4("projection", projection2);
-        ico.setMat4("view", view2);
-
-        // world transformation
+        fuente.setMat4("projection", projection2);
+        fuente.setMat4("view", view2);
         glm::mat4 model2 = glm::mat4(1.0f);
-        ico.setMat4("model", model2);
+        fuente.setMat4("model", model2);
 
-        // render the cube
-        glBindVertexArray(cubeVAO2);
+        glBindVertexArray(fuenteVAO);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawArrays(GL_TRIANGLES, 0, 60);
 
-
+        
         //CALCULO DE TRAYECTORIAS Y ANIMACION
         tiempo = glfwGetTime() - tiempoAux;
         distancia = inicio.distancia(llegada);
         distanciaAux = tiempo * velocidad;
 
         if (distanciaAux >= distancia) {
+            cout << "Inicio: " << inicio.x << inicio.y << inicio.z << endl;
             inicio = llegada;
             nPunto++;
             inicio.x = reflexiones[idRayo].r[nPunto].x;
             inicio.y = reflexiones[idRayo].r[nPunto].y;
             inicio.z = reflexiones[idRayo].r[nPunto].z;
             tiempoAux = glfwGetTime();
-            cout << "Distancia rebasada: " << distanciaAux << endl;
+            
         }
 
         velocidadAux = velocidad / distancia;
         Vector vecDistancia = llegada.restaPuntos(inicio);
-        Vector vecTraslacion = vecDistancia * tiempo * velocidadAux;
+        Vector vecTraslacion = vecDistancia * (tiempo * velocidadAux);
+        
+        //DIBUJAR Y REFLECTAR PARTICULA
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(inicio.x + vecTraslacion.x, inicio.y + vecTraslacion.y, inicio.z + vecTraslacion.z));
         model = glm::scale(model, glm::vec3(0.05f)); // a smaller cube
+        particula.use();
+        particula.setMat4("model", model);
+        particula.setMat4("projection", projection);
+        particula.setVec3("objectColor", 1.0f, 0.0f, 0.0f);
+        particula.setMat4("view", view);
         
 
-        rayo.use();
-        rayo.setMat4("model", model);
-        rayo.setMat4("projection", projection);   
-        rayo.setVec3("objectColor", 1.0f, 1.0f, 1.0f);
-        rayo.setMat4("view", view);
-        
-        /*if ((inicio.distancia(llegada) * (glfwGetTime() - tiempo1) * SPEED) >= inicio.distancia(llegada)) {
-
-            tiempo1 = glfwGetTime();
-            inicio = llegada;
-
-            contadorTemporal++;
-            llegada.x = arrayreflecciones[1].r[contadorTemporal].x * 0.1;
-            llegada.y = arrayreflecciones[1].r[contadorTemporal].y * 0.1;
-            llegada.z = arrayreflecciones[1].r[contadorTemporal].z * 0.1;
-        };
-
-        model = glm::translate(model, glm::vec3(inicio.x + ((llegada.x - inicio.x)) * (glfwGetTime() - tiempo1) * SPEED, inicio.y + ((llegada.y - inicio.y)) * (glfwGetTime() - tiempo1) * SPEED, inicio.z + ((llegada.z - inicio.z) * (glfwGetTime() - tiempo1)) * SPEED));
-        */
-
-        
-
-        glBindVertexArray(cubeVAO3);
+        glBindVertexArray(particulaVAO);
         glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
         glDrawArrays(GL_TRIANGLES, 0, 60);
-
-
-
 
 
 
         glfwSwapBuffers(window);
         glfwPollEvents();
 
+        /*
+        if ((inicio.distancia(llegada) * (glfwGetTime() - tiempo1) * SPEED) >= inicio.distancia(llegada)) {
+
+            tiempo1 = glfwGetTime();
+            inicio = llegada;
+
+            contadorTemporal++;
+            llegada.x = reflexiones[1].r[contadorTemporal].x ;
+            llegada.y = reflexiones[1].r[contadorTemporal].y ;
+            llegada.z = reflexiones[1].r[contadorTemporal].z ;
+        };
+
+        model = glm::translate(model, glm::vec3(inicio.x + ((llegada.x - inicio.x)) * (glfwGetTime() - tiempo1) * SPEED, inicio.y + ((llegada.y - inicio.y)) * (glfwGetTime() - tiempo1) * SPEED, inicio.z + ((llegada.z - inicio.z) * (glfwGetTime() - tiempo1)) * SPEED));
+         */
+
+
     }
 
     // optional: de-allocate all resources once they've outlived their purpose:
 // ------------------------------------------------------------------------
-    glDeleteVertexArrays(1, &cubeVAO);
-    glDeleteVertexArrays(1, &lightCubeVAO);
-    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &salaVAO);
+    glDeleteBuffers(1, &salaVBO);
+    glDeleteVertexArrays(1, &fuenteVAO);
+    glDeleteBuffers(1, &fuenteVBO);
+    glDeleteVertexArrays(1, &particulaVAO);
+    glDeleteBuffers(1, &particulaVBO);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
@@ -475,7 +445,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 }
 //================================================================================================================================================
 
-void laodRoom() {
+void cargarSala() {
     if (!loadedRoom) {
 
         r.NewPlanes(6);
