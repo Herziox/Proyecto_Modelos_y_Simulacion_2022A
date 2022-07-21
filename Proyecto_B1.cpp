@@ -30,29 +30,16 @@ const int n_div = 8;
 
 
 // Coordinación de Vertices coordinates
-GLfloat vertices[24];
+GLfloat vertices[108];
+
+// Coordinación de Vertices coordinates
+GLfloat vertices2[180];
 
 // Indices for vertices order
-GLuint indices[] =
-{
-	0, 1, 2,
-	0, 2, 3,
+GLuint indices[108];
 
-	0, 1, 4,
-	0, 1, 5,
 
-	0, 3, 7,
-	0, 7, 4,
-
-	6, 4, 5,
-	6, 7, 4,
-
-	6, 3, 7,
-	6, 2, 3,
-
-	6, 5, 1,
-	6, 1, 2
-};
+GLuint indices2[180];
 
 
 int main()
@@ -157,14 +144,51 @@ int main()
 
 
 	int cont_vertices = 0;
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < r.NP; i++) {
 		plane planeAux = r.p[i];
-		for (int j = 0; j < planeAux.NP; j++) {
-			point pointAux = planeAux.p[j];
+		for (int j = 0; j < planeAux.NT; j++) {
+			triangle triangleAux = planeAux.t[j];
+			point pointAux;
+
+			pointAux = triangleAux.p0;
+
+			indices[cont_vertices] = cont_vertices;
 			vertices[cont_vertices] = pointAux.x;
 			cont_vertices++;
+
+			indices[cont_vertices] = cont_vertices;
 			vertices[cont_vertices] = pointAux.y;
 			cont_vertices++;
+
+			indices[cont_vertices] = cont_vertices;
+			vertices[cont_vertices] = pointAux.z;
+			cont_vertices++;
+
+			pointAux = triangleAux.p1;
+
+			indices[cont_vertices] = cont_vertices;
+			vertices[cont_vertices] = pointAux.x;
+			cont_vertices++;
+
+			indices[cont_vertices] = cont_vertices;
+			vertices[cont_vertices] = pointAux.y;
+			cont_vertices++;
+
+			indices[cont_vertices] = cont_vertices;
+			vertices[cont_vertices] = pointAux.z;
+			cont_vertices++;
+
+			pointAux = triangleAux.p2;
+
+			indices[cont_vertices] = cont_vertices;
+			vertices[cont_vertices] = pointAux.x;
+			cont_vertices++;
+
+			indices[cont_vertices] = cont_vertices;
+			vertices[cont_vertices] = pointAux.y;
+			cont_vertices++;
+
+			indices[cont_vertices] = cont_vertices;
 			vertices[cont_vertices] = pointAux.z;
 			cont_vertices++;
 
@@ -224,22 +248,6 @@ int main()
 
 
 
-	/*
-	* I'm doing this relative path thing in order to centralize all the resources into one folder and not
-	* duplicate them between tutorial folders. You can just copy paste the resources from the 'Resources'
-	* folder and then give a relative path from this folder to whatever resource you want to get to.
-	* Also note that this requires C++17, so go to Project Properties, C/C++, Language, and select C++17
-	*/
-
-	/*// Texture
-	Texture brickTex((parentDir + texPath + "brick.png").c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);*/
-	//brickTex.texUnit(shaderProgram, "tex0", 0);
-
-	// Original code from the tutorial
-	/*Texture brickTex("brick.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	brickTex.texUnit(shaderProgram, "tex0", 0);*/
-
-
 
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
@@ -276,6 +284,7 @@ int main()
 	}
 
 
+	
 
 	// Delete all the objects we've created
 	VAO1.Delete();
