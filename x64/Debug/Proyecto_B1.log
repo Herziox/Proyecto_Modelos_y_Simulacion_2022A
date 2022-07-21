@@ -1,6 +1,4 @@
-﻿  Camera.cpp
-  EBO.cpp
-  Proyecto_B1.cpp
+﻿  Proyecto_B1.cpp
 C:\src\University\MS\Proyecto_B1\Header.h(300,25): warning C4244: '=': conversión de 'double' a 'int'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Header.h(778,1): warning C4305: '=': truncamiento de 'double' a 'float'
 C:\src\University\MS\Proyecto_B1\Header.h(779,1): warning C4305: '=': truncamiento de 'double' a 'float'
@@ -8,27 +6,8 @@ C:\src\University\MS\Proyecto_B1\Header.h(769,13): warning C4101: 'P': variable 
 C:\src\University\MS\Proyecto_B1\Header.h(769,16): warning C4101: 'T': variable local sin referencia
 C:\src\University\MS\Proyecto_B1\Header.h(939,13): warning C4101: 'n': variable local sin referencia
 C:\src\University\MS\Proyecto_B1\Header.h(1083,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-  shaderClass.cpp
-  stb.cpp
-  Texture.cpp
-  VAO.cpp
-C:\src\University\MS\Proyecto_B1\VAO.cpp(13,63): warning C4244: 'argumento': conversión de 'GLsizeiptr' a 'GLsizei'; posible pérdida de datos
-  VBO.cpp
-  Generando código...
-  glad.c
-glfw3.lib(input.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(input.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(init.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(init.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(window.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(window.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(context.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(context.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(win32_window.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(win32_window.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(win32_joystick.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(win32_joystick.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(win32_time.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(win32_time.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(win32_init.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(win32_init.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(win32_monitor.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(win32_monitor.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(win32_thread.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(win32_thread.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(monitor.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(monitor.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(vulkan.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(vulkan.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(wgl_context.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(wgl_context.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(egl_context.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(egl_context.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-glfw3.lib(osmesa_context.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(osmesa_context.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
-  Proyecto_B1.vcxproj -> C:\src\University\MS\Proyecto_B1\x64\Debug\Proyecto_B1.exe
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(164,38): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(166,38): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(168,38): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(218,57): error C2660: 'VAO::LinkAttrib': la función no acepta 5 argumentos
+C:\src\University\MS\Proyecto_B1\VAO.h(16,7): message : vea la declaración de 'VAO::LinkAttrib'

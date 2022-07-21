@@ -25,20 +25,12 @@ using namespace std;
 const unsigned int width = 800;
 const unsigned int height = 800;
 
+const int n_div = 8;
+
 
 
 // Coordinación de Vertices coordinates
-GLfloat vertices[] =
-{ //     COORDINATES     /        COLORS      /   
-	-0.5f, -0.5f,  0.5f,     0.9f, 0.0f, 0.0f, //0
-	-0.5f, -0.5f, -0.5f,      0.9f, 0.0f, 0.0f, //1
-	 0.5f, -0.5f, -0.5f,      0.9f, 0.0f, 0.0f, //2
-	 0.5f, -0.5f,  0.5f,     0.9f, 0.0f, 0.0f, //3
-	-0.5f, 0.5f,  0.5f,      0.9f, 0.0f, 0.0f,  //4 
-	-0.5f, 0.5f, -0.5f,      0.9f, 0.0f, 0.0f,  //5
-	 0.5f, 0.5f, -0.5f,      0.9f, 0.0f, 0.0f,  //6
-	 0.5f, 0.5f,  0.5f,      0.9f, 0.0f, 0.0f	  //7
-};
+GLfloat vertices[24];
 
 // Indices for vertices order
 GLuint indices[] =
@@ -65,45 +57,120 @@ GLuint indices[] =
 
 int main()
 {
+	room r;
+	r.NewPlanes(6);
+	//-------------square 1 back
+	r.p[0].NewPoints(4);
+	r.p[0].p[0].x = -2.0f;
+	r.p[0].p[0].y = 2.0f;
+	r.p[0].p[0].z = 2.0f;
+	r.p[0].p[1].x = -2.0f;
+	r.p[0].p[1].y = -2.0f;
+	r.p[0].p[1].z = 2.0f;
+	r.p[0].p[2].x = -2.0f;
+	r.p[0].p[2].y = -2.0f;
+	r.p[0].p[2].z = -2.0f;
+	r.p[0].p[3].x = -2.0f;
+	r.p[0].p[3].y = 2.0f;
+	r.p[0].p[3].z = -2.0f;
+	r.p[0].PointGenTriangle();
 
-	plane p;
-	p.NewPoints(4);
+	//-------------square 2 front
+	r.p[1].NewPoints(4);
+	r.p[1].p[0].x = 2.0f;
+	r.p[1].p[0].y = 2.0f;
+	r.p[1].p[0].z = 2.0f;
+	r.p[1].p[1].x = 2.0f;
+	r.p[1].p[1].y = -2.0f;
+	r.p[1].p[1].z = 2.0f;
+	r.p[1].p[2].x = 2.0f;
+	r.p[1].p[2].y = -2.0f;
+	r.p[1].p[2].z = -2.0f;
+	r.p[1].p[3].x = 2.0f;
+	r.p[1].p[3].y = 2.0f;
+	r.p[1].p[3].z = -2.0f;
+	r.p[1].PointGenTriangle();
 
-	p.p[0].x = -1.0;
-	p.p[0].y = 1.0;
-	p.p[0].z = 1.0;
+	//-------------square 3 left
+	r.p[2].NewPoints(4);
+	r.p[2].p[0].x = -2.0f;
+	r.p[2].p[0].y = -2.0f;
+	r.p[2].p[0].z = 2.0f;
+	r.p[2].p[1].x = 2.0f;
+	r.p[2].p[1].y = -2.0f;
+	r.p[2].p[1].z = 2.0f;
+	r.p[2].p[2].x = 2.0f;
+	r.p[2].p[2].y = -2.0f;
+	r.p[2].p[2].z = -2.0f;
+	r.p[2].p[3].x = -2.0f;
+	r.p[2].p[3].y = -2.0f;
+	r.p[2].p[3].z = -2.0f;
+	r.p[2].PointGenTriangle();
 
-	p.p[1].x = 1.0;
-	p.p[1].y = 1.0;
-	p.p[1].z = 1.0;
+	//-------------square 4 right
+	r.p[3].NewPoints(4);
+	r.p[3].p[0].x = 2.0f;
+	r.p[3].p[0].y = 2.0f;
+	r.p[3].p[0].z = 2.0f;
+	r.p[3].p[1].x = -2.0f;
+	r.p[3].p[1].y = 2.0f;
+	r.p[3].p[1].z = 2.0f;
+	r.p[3].p[2].x = -2.0f;
+	r.p[3].p[2].y = 2.0f;
+	r.p[3].p[2].z = -2.0f;
+	r.p[3].p[3].x = 2.0f;
+	r.p[3].p[3].y = 2.0f;
+	r.p[3].p[3].z = -2.0f;
+	r.p[3].PointGenTriangle();
 
-	p.p[2].x = 1.0;
-	p.p[2].y = 1.0;
-	p.p[2].z = -1.0;
+	//-------------square 5 top
+	r.p[4].NewPoints(4);
+	r.p[4].p[0].x = -2.0f;
+	r.p[4].p[0].y = -2.0f;
+	r.p[4].p[0].z = 2.0f;
+	r.p[4].p[1].x = -2.0f;
+	r.p[4].p[1].y = 2.0f;
+	r.p[4].p[1].z = 2.0f;
+	r.p[4].p[2].x = 2.0f;
+	r.p[4].p[2].y = 2.0f;
+	r.p[4].p[2].z = 2.0f;
+	r.p[4].p[3].x = 2.0f;
+	r.p[4].p[3].y = -2.0f;
+	r.p[4].p[3].z = 2.0f;
+	r.p[4].PointGenTriangle();
 
-	p.p[3].x = -1.0;
-	p.p[3].y = 1.0;
-	p.p[3].z = -1.0;
-	cout << "N�mero de puntos totales" << endl;
-	cout << p.NP << endl;
-	cout << "Puntos de p[0]" << endl;
-	p.p[0].print();
-	cout << "Puntos de p[1]" << endl;
-	p.p[1].print();
-	cout << "Puntos de p[2]" << endl;
-	p.p[2].print();
-	cout << "Puntos de p[3]" << endl;
-	p.p[3].print();
-	cout << "N�mero de puntos totales despues de borrae" << endl;
-	//p.DeletePoint(0);
-	cout << p.NP << endl;
-	p.p[0].print();
-	cout << "Puntos de p[1]" << endl;
-	p.p[1].print();
-	cout << "Puntos de p[2]" << endl;
-	p.p[2].print();
-	cout << "Puntos de p[3]" << endl;
-	p.p[3].print();
+	//-------------square 1 bottom
+	r.p[5].NewPoints(4);
+	r.p[5].p[0].x = -2.0f;
+	r.p[5].p[0].y = 2.0f;
+	r.p[5].p[0].z = -2.0f;
+	r.p[5].p[1].x = -2.0f;
+	r.p[5].p[1].y = -2.0f;
+	r.p[5].p[1].z = -2.0f;
+	r.p[5].p[2].x = 2.0f;
+	r.p[5].p[2].y = -2.0f;
+	r.p[5].p[2].z = -2.0f;
+	r.p[5].p[3].x = 2.0f;
+	r.p[5].p[3].y = 2.0f;
+	r.p[5].p[3].z = -2.0f;
+	r.p[5].PointGenTriangle();
+
+
+	int cont_vertices = 0;
+	for (int i = 0; i < 2; i++) {
+		plane planeAux = r.p[i];
+		for (int j = 0; j < planeAux.NP; j++) {
+			point pointAux = planeAux.p[j];
+			vertices[cont_vertices] = pointAux.x;
+			cont_vertices++;
+			vertices[cont_vertices] = pointAux.y;
+			cont_vertices++;
+			vertices[cont_vertices] = pointAux.z;
+			cont_vertices++;
+
+		}
+	}
+
 
 
 	// Initializar GLFW
@@ -148,8 +215,8 @@ int main()
 	EBO EBO1(indices, sizeof(indices));
 
 	// Vincula atributos de VBO como coordenadas y colores a VAO
-	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+	//VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	// Unbind all to prevent accidentally modifying them
 	VAO1.Unbind();
 	VBO1.Unbind();
