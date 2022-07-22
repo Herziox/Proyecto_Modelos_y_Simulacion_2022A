@@ -184,7 +184,7 @@ int main()
     //REFLEXIONES
     reflection* reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS);
 
-    int idRayo = 0;
+    int idRayo = 2;
     int nPunto = 0;
 
     // PUNTO DE PARTIDA
@@ -319,18 +319,17 @@ int main()
         distanciaAux = tiempo * velocidad;
 
         if (distanciaAux >= distancia) {
-            cout << "Inicio: " << inicio.x << inicio.y << inicio.z << endl;
             inicio = llegada;
             nPunto++;
-            inicio.x = reflexiones[idRayo].r[nPunto].x;
-            inicio.y = reflexiones[idRayo].r[nPunto].y;
-            inicio.z = reflexiones[idRayo].r[nPunto].z;
+            llegada.x = reflexiones[idRayo].r[nPunto].x;
+            llegada.y = reflexiones[idRayo].r[nPunto].y;
+            llegada.z = reflexiones[idRayo].r[nPunto].z;
             tiempoAux = glfwGetTime();
             
         }
 
         velocidadAux = velocidad / distancia;
-        Vector vecDistancia = llegada.restaPuntos(inicio);
+        Vector vecDistancia = llegada - inicio;
         Vector vecTraslacion = vecDistancia * (tiempo * velocidadAux);
         
         //DIBUJAR Y REFLECTAR PARTICULA
