@@ -1,12 +1,12 @@
 ﻿  Proyecto_B1.cpp
 C:\src\University\MS\Proyecto_B1\shader.h(55,40): warning C4101: 'e': variable local sin referencia
-C:\src\University\MS\Proyecto_B1\Header.h(300,25): warning C4244: '=': conversión de 'double' a 'int'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Header.h(778,1): warning C4305: '=': truncamiento de 'double' a 'float'
-C:\src\University\MS\Proyecto_B1\Header.h(779,1): warning C4305: '=': truncamiento de 'double' a 'float'
-C:\src\University\MS\Proyecto_B1\Header.h(769,13): warning C4101: 'P': variable local sin referencia
-C:\src\University\MS\Proyecto_B1\Header.h(769,16): warning C4101: 'T': variable local sin referencia
-C:\src\University\MS\Proyecto_B1\Header.h(939,13): warning C4101: 'n': variable local sin referencia
-C:\src\University\MS\Proyecto_B1\Header.h(1083,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Header.h(315,25): warning C4244: '=': conversión de 'double' a 'int'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Header.h(793,1): warning C4305: '=': truncamiento de 'double' a 'float'
+C:\src\University\MS\Proyecto_B1\Header.h(794,1): warning C4305: '=': truncamiento de 'double' a 'float'
+C:\src\University\MS\Proyecto_B1\Header.h(784,13): warning C4101: 'P': variable local sin referencia
+C:\src\University\MS\Proyecto_B1\Header.h(784,16): warning C4101: 'T': variable local sin referencia
+C:\src\University\MS\Proyecto_B1\Header.h(954,13): warning C4101: 'n': variable local sin referencia
+C:\src\University\MS\Proyecto_B1\Header.h(1098,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(112,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(114,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(116,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos

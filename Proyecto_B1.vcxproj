@@ -148,7 +148,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Definitions.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />

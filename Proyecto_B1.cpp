@@ -16,7 +16,7 @@
 #include "Header.h"
 
 //VariablesGlobales
-bool loadedRoom;
+bool salaCargada;
 room r;
 int NumTri = 0;
 source s;
@@ -251,7 +251,7 @@ int main()
     double tiempoAux = 0.0;
     double distancia = 0.0;
     double distanciaAux = 0.0;
-    double velocidad = 3.0;
+    double velocidad = SPEED;
     double velocidadAux = velocidad;
 
 
@@ -427,7 +427,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 //================================================================================================================================================
 
 void cargarSala() {
-    if (!loadedRoom) {
+    if (!salaCargada) {
 
         r.NewPlanes(6);
         //-------------square 1 back

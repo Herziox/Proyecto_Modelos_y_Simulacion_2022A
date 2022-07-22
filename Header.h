@@ -3,9 +3,24 @@
 #ifndef HeaderH
 #define HeaderH
 //---------------------------------------------------------------------------
-#include "Definitions.h"
+
 #include <stdio.h>
 #include <math.h>
+
+#define None                    -1
+//Projection-----------------------------------------------------------------
+#define xy                      0
+#define xz                      1
+#define yz                      2
+//Constants------------------------------------------------------------------
+#define NUM_COLORS          4       //N�mero de colores 
+
+#define SPEED               1.5     //Velocidad de animaci�n
+#define V_SON               340.0   //Velocidad del sonido
+#define PI                  3.1415926535897932384626433832795
+#define MaxNPoints          200     //maximum Number of points
+#define MaxNSelectedPlanes  2000    //1000//maximum Number of selected planes
+
 
 using namespace std;
 
