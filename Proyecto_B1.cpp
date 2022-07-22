@@ -184,7 +184,7 @@ int main()
     //REFLEXIONES
     reflection* reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS);
 
-    int idRayo = 2;
+    int idRayo = 1;
     int nPunto = 0;
 
     // PUNTO DE PARTIDA
@@ -325,7 +325,6 @@ int main()
             llegada.y = reflexiones[idRayo].r[nPunto].y;
             llegada.z = reflexiones[idRayo].r[nPunto].z;
             tiempoAux = glfwGetTime();
-            idRayo++;
         }
 
         velocidadAux = velocidad / distancia;
