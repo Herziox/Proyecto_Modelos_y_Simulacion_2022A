@@ -102,12 +102,11 @@ int main()
     //CARGAR SALA
     cargarSala();
 
+    //ARREGLO DE VERTICES DE SALA
     int numeroTriangulos = NumTri;
     float verticesSala[108];
     int contSala = 0;
-    
 
-    //ARREGLO DE VERTICES DE SALA
     for (int i = 0; i < r.NP; i++) {
         for (int j = 0; j < r.p[i].NT; j++) {
             verticesSala[contSala] = r.p[i].t[j].p0.x ;
@@ -184,7 +183,7 @@ int main()
     //REFLEXIONES
     reflection* reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS);
 
-    int idRayo = 1;
+    int idRayo = 6;
     int nPunto = 0;
 
     // PUNTO DE PARTIDA
@@ -350,22 +349,6 @@ int main()
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-
-        /*
-        if ((inicio.distancia(llegada) * (glfwGetTime() - tiempo1) * SPEED) >= inicio.distancia(llegada)) {
-
-            tiempo1 = glfwGetTime();
-            inicio = llegada;
-
-            contadorTemporal++;
-            llegada.x = reflexiones[1].r[contadorTemporal].x ;
-            llegada.y = reflexiones[1].r[contadorTemporal].y ;
-            llegada.z = reflexiones[1].r[contadorTemporal].z ;
-        };
-
-        model = glm::translate(model, glm::vec3(inicio.x + ((llegada.x - inicio.x)) * (glfwGetTime() - tiempo1) * SPEED, inicio.y + ((llegada.y - inicio.y)) * (glfwGetTime() - tiempo1) * SPEED, inicio.z + ((llegada.z - inicio.z) * (glfwGetTime() - tiempo1)) * SPEED));
-         */
-
 
     }
 
