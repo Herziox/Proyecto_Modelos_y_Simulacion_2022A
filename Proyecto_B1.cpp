@@ -22,9 +22,12 @@ int NumTri = 0;
 source s;
 int N_RAYOS = 20;
 
-matInt matTime; //Matriz de tiempoç
+matInt matTime; //Matriz de tiempo
+matDouble matAngles; // Matriz de angulos
 int N_DIV = 1;
 
+
+using namespace std;
 
 
 
@@ -557,19 +560,41 @@ void cargarSala() {
 
         NumTri = cont_t;
         //numRec = 27;
+        int idTriX = 0;
+        int idTriY = 0;
 
         matDouble matDist; //Matriz de distancia
         matDist.init(NumTri, NumTri);
+        matTime.init(NumTri, NumTri);
+        matAngles.init(NumTri, NumTri);
+        double* areaT;
+        areaT = NULL;
+        areaT = new double[NumTri];
+
+        for (int i = 0; i < NumTri; i++) {
+            areaT[i] = 0.0;
+        }
+
         for (int i = 0; i < r.NP; i++) {
 
             for (int j = 0; j < r.p[i].NT; j++) {
-               // r.p[i].t[j].bc; //Primer Baricentro
+               // Triangulo 1
                 for (int k = 0; k < r.NP; k++) {
 
                     for (int l = 0; l < r.p[k].NT; l++) {
-                        // r.p[k].t[l].bc; //Segundo Baricentro
+                        // Triangulo 2
+                        idTriX = r.p[i].t[j].ID;
+                        idTriY = r.p[k].t[l].ID;
                         if (i != k) {
-                            matDist.d[r.p[i].t[j].ID][r.p[k].t[l].ID] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc);
+                            matDist.d[idTriX][idTriY] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc);
+                            matTime.i[idTriX][idTriY] = int(1000 * matDist.d[idTriX][idTriY] / V_SON);
+                            matAngles.d[idTriX][idTriY] = r.p[k].t[l].solidAngle(r.p[i].t[j].bc);
+                            areaT[idTriX] += matAngles.d[idTriX][idTriY];
+                        }
+                        else {
+                            matDist.d[idTriX][idTriY] = 0.0;
+                            matTime.i[idTriX][idTriY] = 0;
+                            matAngles.d[idTriX][idTriY] = 0.0;
                         }
                     }
                 }
@@ -577,24 +602,20 @@ void cargarSala() {
             }
         }
 
-        matTime.init(NumTri, NumTri);
-
-        for (int i = 0; i < matDist.I; i++) {
-
-            for (int j = 0; j < matDist.J; j++) {
-                
-                matTime.i[i][j] = int(1000*matDist.d[i][j] / V_SON);
-                
-            }
+        for (int i = 0; i < NumTri; i++) {
+            for (int j = 0; j< NumTri; j++) {
+                matAngles.d[i][j] = matAngles.d[i][j]/areaT[i];
+            };
         }
-        cout << "Grabar archivo" << endl;
+
+      
+        cout << "Grabar archivo de Distancia" << endl;
+        matDist.grabarArchivo('d', NumTri);
+        cout << "Grabar archivo de Tiempo" << endl;
         matTime.grabarArchivo('t', NumTri);
+        cout << "Grabar archivo de Porcentajes" << endl;
+        matAngles.grabarArchivo('p', NumTri);
         
-
-
-
-
-
     }
 }
 

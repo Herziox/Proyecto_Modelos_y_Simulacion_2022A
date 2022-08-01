@@ -1309,14 +1309,6 @@ public:
         energia = NULL;
     };
 
-    ~MatEnergia() {
-        /*
-               ele=0;
-               tim=0;
-               delete [] energia;
-               energia=NULL;
-        */
-    };
     
     void init(int e, int t) {
         ele = e;
