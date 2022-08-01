@@ -22,6 +22,12 @@ int NumTri = 0;
 source s;
 int N_RAYOS = 20;
 
+matInt matTime; //Matriz de tiempoç
+int N_DIV = 1;
+
+
+
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -103,7 +109,7 @@ int main()
     cargarSala();
 
     //ARREGLO DE VERTICES DE SALA
-    int numeroTriangulos = NumTri;
+
     float verticesSala[108];
     int contSala = 0;
 
@@ -444,7 +450,9 @@ void cargarSala() {
         r.p[0].p[3].x = -2.0f;
         r.p[0].p[3].y = 2.0f;
         r.p[0].p[3].z = -2.0f;
-        r.p[0].PointGenTriangle();
+        //r.p[0].PointGenTriangle();//Actualizar
+        r.p[0].MoreTriangle(N_DIV);
+
 
         //-------------square 2 front
         r.p[1].NewPoints(4);
@@ -460,7 +468,9 @@ void cargarSala() {
         r.p[1].p[3].x = 2.0f;
         r.p[1].p[3].y = 2.0f;
         r.p[1].p[3].z = -2.0f;
-        r.p[1].PointGenTriangle();
+        //r.p[1].PointGenTriangle();//Actualizar
+        r.p[1].MoreTriangle(N_DIV);
+
 
         //-------------square 3 left
         r.p[2].NewPoints(4);
@@ -476,7 +486,9 @@ void cargarSala() {
         r.p[2].p[3].x = -2.0f;
         r.p[2].p[3].y = -2.0f;
         r.p[2].p[3].z = -2.0f;
-        r.p[2].PointGenTriangle();
+        //r.p[2].PointGenTriangle();//Actualizar
+        r.p[2].MoreTriangle(N_DIV);
+
 
         //-------------square 4 right
         r.p[3].NewPoints(4);
@@ -492,7 +504,9 @@ void cargarSala() {
         r.p[3].p[3].x = 2.0f;
         r.p[3].p[3].y = 2.0f;
         r.p[3].p[3].z = -2.0f;
-        r.p[3].PointGenTriangle();
+        //r.p[3].PointGenTriangle();//Actualizar
+        r.p[3].MoreTriangle(N_DIV);
+
 
         //-------------square 5 top
         r.p[4].NewPoints(4);
@@ -508,7 +522,8 @@ void cargarSala() {
         r.p[4].p[3].x = 2.0f;
         r.p[4].p[3].y = -2.0f;
         r.p[4].p[3].z = 2.0f;
-        r.p[4].PointGenTriangle();
+        //r.p[4].PointGenTriangle();//Actualizar
+        r.p[4].MoreTriangle(N_DIV);
 
         //-------------square 1 bottom
         r.p[5].NewPoints(4);
@@ -524,7 +539,8 @@ void cargarSala() {
         r.p[5].p[3].x = 2.0f;
         r.p[5].p[3].y = 2.0f;
         r.p[5].p[3].z = -2.0f;
-        r.p[5].PointGenTriangle();
+        //r.p[5].PointGenTriangle(); //Actualizar
+        r.p[5].MoreTriangle(N_DIV);
 
 
         //Calcular los normales del plano
@@ -537,11 +553,44 @@ void cargarSala() {
                 r.p[i].t[j].ID = cont_t;
                 cont_t++;
             }
-
         }
 
         NumTri = cont_t;
         //numRec = 27;
+
+        matDouble matDist; //Matriz de distancia
+        matDist.init(NumTri, NumTri);
+        for (int i = 0; i < r.NP; i++) {
+
+            for (int j = 0; j < r.p[i].NT; j++) {
+               // r.p[i].t[j].bc; //Primer Baricentro
+                for (int k = 0; k < r.NP; k++) {
+
+                    for (int l = 0; l < r.p[k].NT; l++) {
+                        // r.p[k].t[l].bc; //Segundo Baricentro
+                        if (i != k) {
+                            matDist.d[r.p[i].t[j].ID][r.p[k].t[l].ID] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc);
+                        }
+                    }
+                }
+
+            }
+        }
+
+        matTime.init(NumTri, NumTri);
+
+        for (int i = 0; i < matDist.I; i++) {
+
+            for (int j = 0; j < matDist.J; j++) {
+                
+                matTime.i[i][j] = int(1000*matDist.d[i][j] / V_SON);
+                
+            }
+        }
+        cout << "Grabar archivo" << endl;
+        matTime.grabarArchivo('t', NumTri);
+        
+
 
 
 
