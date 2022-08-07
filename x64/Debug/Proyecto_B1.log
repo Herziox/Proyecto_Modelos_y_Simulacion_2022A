@@ -7,30 +7,33 @@ C:\src\University\MS\Proyecto_B1\Header.h(784,13): warning C4101: 'P': variable 
 C:\src\University\MS\Proyecto_B1\Header.h(784,16): warning C4101: 'T': variable local sin referencia
 C:\src\University\MS\Proyecto_B1\Header.h(954,13): warning C4101: 'n': variable local sin referencia
 C:\src\University\MS\Proyecto_B1\Header.h(1098,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(121,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(123,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(125,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(127,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(129,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(131,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(133,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(135,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(137,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(139,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(141,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(153,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(157,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(143,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(145,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(161,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(165,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(168,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(172,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(169,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(173,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(176,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(180,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(183,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(275,28): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(417,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(418,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(422,19): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(423,19): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(424,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(425,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(434,31): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(184,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(188,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(191,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(283,28): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(425,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(426,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(430,19): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(431,19): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(432,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(433,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(442,31): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+glfw3.lib(input.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(input.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+glfw3.lib(window.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(window.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+glfw3.lib(win32_window.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(win32_window.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
   Proyecto_B1.vcxproj -> C:\src\University\MS\Proyecto_B1\x64\Debug\Proyecto_B1.exe

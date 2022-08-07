@@ -1300,8 +1300,8 @@ public:
 class MatEnergia {
 public:
     double** energia;
-    int ele; //N�mero de tri�ngulos en la sala
-    int tim; //Discretizaci�n temporal (sugiero milisegundos)
+    int ele; //N�mero de triángulos en la sala
+    int tim; //Discretización temporal (sugiero milisegundos)
 
     MatEnergia() {
         ele = 0;

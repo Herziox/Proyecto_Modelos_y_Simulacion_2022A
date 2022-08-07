@@ -24,7 +24,7 @@ int N_RAYOS = 20;
 
 matInt matTime; //Matriz de tiempo
 matDouble matAngles; // Matriz de angulos
-int N_DIV = 1;
+int N_DIV = 4;
 
 
 using namespace std;
@@ -112,10 +112,14 @@ int main()
     cargarSala();
 
     //ARREGLO DE VERTICES DE SALA
-
-    float verticesSala[108];
+    /*int dimVertSala = 6 * r.p[0].NT * 3 * 3;
+    float* verticesSala;
+    verticesSala = NULL;
+    verticesSala = new float[dimVertSala];
+    cout << dimVertSala<<" Numero triangulos: "<< NumTri << endl;*/
+    float verticesSala[1728];
     int contSala = 0;
-
+    
     for (int i = 0; i < r.NP; i++) {
         for (int j = 0; j < r.p[i].NT; j++) {
             verticesSala[contSala] = r.p[i].t[j].p0.x ;
@@ -300,7 +304,7 @@ int main()
 
         glBindVertexArray(salaVAO);
         glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawArrays(GL_TRIANGLES, 0, 576);
 
 
         //DIBUJAR LA FUENTE
@@ -352,7 +356,7 @@ int main()
 
         glBindVertexArray(particulaVAO);
         glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
-        glDrawArrays(GL_TRIANGLES, 0, 60);
+        glDrawArrays(GL_TRIANGLES, 0, 576);
 
 
 
@@ -545,8 +549,9 @@ void cargarSala() {
         //r.p[5].PointGenTriangle(); //Actualizar
         r.p[5].MoreTriangle(N_DIV);
 
-
-        //Calcular los normales del plano
+        /*============================================================================================//
+         1.Calcule el centroide de todos los triángulos de la sala.
+        //============================================================================================*/
         int cont_t = 0;
         for (int i = 0; i < r.NP; i++) {
             r.p[i].n = NormalPlano(r.p[i]);
@@ -559,17 +564,38 @@ void cargarSala() {
         }
 
         NumTri = cont_t;
-        //numRec = 27;
-        int idTriX = 0;
-        int idTriY = 0;
 
+        /*============================================================================================//
+         2. Genere una matriz de tipo double que almacene la distancia que existe entre los centros de 
+         los diferentes triángulos de la sala.Está matriz tendrá una dimensión de n×n donde n será el 
+         número de triángulos de la sala.      
+        //============================================================================================*/
+        
         matDouble matDist; //Matriz de distancia
         matDist.init(NumTri, NumTri);
+
+        /*============================================================================================//
+         3. Calcule todos los “tiempos de vuelo” en milisegundos que demorarían las reflexiones difusas
+         para llegar de un centroide a otro (entre todos los triángulos que apliquen, es decir que sean
+         visibles) considerando una velocidad de transmisión de 340 m/s (constante V_SON). Dichos 
+         tiempos también deberán ser almacenados en una matriz “tiempo” de tipo int de n×n elementos.
+        //============================================================================================*/
         matTime.init(NumTri, NumTri);
+
+        /*============================================================================================//
+         4. Calcule el porcentaje de la energía que será enviada a cada triángulo, considerando el 
+         ángulo sólido (área de triángulo proyectado a una distancia de 0.2) entre todos los triángulos
+         visibles desde el punto de partida (centroide). Estos porcentajes también deberán almacenarse
+         en una matriz “porcentaje” de tipo double de n×n elementos
+        //============================================================================================*/
+
         matAngles.init(NumTri, NumTri);
+
         double* areaT;
         areaT = NULL;
         areaT = new double[NumTri];
+        int idTriX = 0;
+        int idTriY = 0;
 
         for (int i = 0; i < NumTri; i++) {
             areaT[i] = 0.0;
@@ -586,9 +612,9 @@ void cargarSala() {
                         idTriX = r.p[i].t[j].ID;
                         idTriY = r.p[k].t[l].ID;
                         if (i != k) {
-                            matDist.d[idTriX][idTriY] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc);
-                            matTime.i[idTriX][idTriY] = int(1000 * matDist.d[idTriX][idTriY] / V_SON);
-                            matAngles.d[idTriX][idTriY] = r.p[k].t[l].solidAngle(r.p[i].t[j].bc);
+                            matDist.d[idTriX][idTriY] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc); // PARTE 2
+                            matTime.i[idTriX][idTriY] = int(1000 * matDist.d[idTriX][idTriY] / V_SON); // PARTE 3
+                            matAngles.d[idTriX][idTriY] = r.p[k].t[l].solidAngle(r.p[i].t[j].bc); // PARTE 4
                             areaT[idTriX] += matAngles.d[idTriX][idTriY];
                         }
                         else {
@@ -615,6 +641,17 @@ void cargarSala() {
         matTime.grabarArchivo('t', NumTri);
         cout << "Grabar archivo de Porcentajes" << endl;
         matAngles.grabarArchivo('p', NumTri);
+
+        /*============================================================================================//
+         5. Distribuya la energía difusa según la matriz “porcentaje” entre todos los triángulos que
+         sean visibles entre sí, respetando el tiempo de vuelo/desplazamiento dado por la matriz
+         “tiempo”.  Para registrar este cálculo, actualice la matriz energía, mE, (espacio/tiempo)
+         según corresponda. 
+        //============================================================================================*/
+
+        MatEnergia matEnergia;
+        matEnergia.init(NumTri, 1000);
+
         
     }
 }
