@@ -24,6 +24,7 @@ int N_RAYOS = 20;
 
 matInt matTime; //Matriz de tiempo
 matDouble matAngles; // Matriz de angulos
+MatEnergia matEnergia; // Matriz de energia
 int N_DIV = 4;
 
 
@@ -649,9 +650,22 @@ void cargarSala() {
          según corresponda. 
         //============================================================================================*/
 
-        MatEnergia matEnergia;
-        matEnergia.init(NumTri, 1000);
+        
+        matEnergia.init(NumTri, NumTri);
+        
 
+        for (int i = 0; i < NumTri; i++) {
+            for (int j = 0; j < NumTri; j++) {
+                matEnergia.energia[i][j] = matAngles.d[i][j] * float(matTime.i[i][j]);
+            };
+        }
+
+        cout << "Grabar archivo de Energia" << endl;
+        matEnergia.grabarArchivo('e', NumTri, NumTri);
+
+        matEnergia.normalizar(matEnergia.maxEne());
+        cout << "Grabar archivo de Energia Normalizada" << endl;
+        matEnergia.grabarArchivo('N', NumTri, NumTri);
         
     }
 }
