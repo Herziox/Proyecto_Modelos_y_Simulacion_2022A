@@ -1,12 +1,12 @@
 ﻿  Proyecto_B1.cpp
 C:\src\University\MS\Proyecto_B1\shader.h(55,40): warning C4101: 'e': variable local sin referencia
-C:\src\University\MS\Proyecto_B1\Header.h(315,25): warning C4244: '=': conversión de 'double' a 'int'; posible pérdida de datos
-C:\src\University\MS\Proyecto_B1\Header.h(793,1): warning C4305: '=': truncamiento de 'double' a 'float'
-C:\src\University\MS\Proyecto_B1\Header.h(794,1): warning C4305: '=': truncamiento de 'double' a 'float'
-C:\src\University\MS\Proyecto_B1\Header.h(784,13): warning C4101: 'P': variable local sin referencia
-C:\src\University\MS\Proyecto_B1\Header.h(784,16): warning C4101: 'T': variable local sin referencia
-C:\src\University\MS\Proyecto_B1\Header.h(954,13): warning C4101: 'n': variable local sin referencia
-C:\src\University\MS\Proyecto_B1\Header.h(1098,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Header.h(317,25): warning C4244: '=': conversión de 'double' a 'int'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Header.h(795,1): warning C4305: '=': truncamiento de 'double' a 'float'
+C:\src\University\MS\Proyecto_B1\Header.h(796,1): warning C4305: '=': truncamiento de 'double' a 'float'
+C:\src\University\MS\Proyecto_B1\Header.h(786,13): warning C4101: 'P': variable local sin referencia
+C:\src\University\MS\Proyecto_B1\Header.h(786,16): warning C4101: 'T': variable local sin referencia
+C:\src\University\MS\Proyecto_B1\Header.h(956,13): warning C4101: 'n': variable local sin referencia
+C:\src\University\MS\Proyecto_B1\Header.h(1100,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(126,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(128,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(130,52): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
@@ -33,4 +33,8 @@ C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(428,19): warning C4244: 'inicia
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(429,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(430,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(439,31): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\src\University\MS\Proyecto_B1\Proyecto_B1.cpp(682,32): warning C4305: '=': truncamiento de 'double' a 'float'
+glfw3.lib(input.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(input.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+glfw3.lib(window.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(window.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+glfw3.lib(win32_window.obj) : warning LNK4099: no se encontró PDB 'glfw.pdb' con 'glfw3.lib(win32_window.obj)' o en 'C:\src\University\MS\Proyecto_B1\x64\Debug\glfw.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
   Proyecto_B1.vcxproj -> C:\src\University\MS\Proyecto_B1\x64\Debug\Proyecto_B1.exe

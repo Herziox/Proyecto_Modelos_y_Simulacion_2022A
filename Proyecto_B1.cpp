@@ -612,7 +612,13 @@ void cargarSala() {
                         // Triangulo 2
                         idTriX = r.p[i].t[j].ID;
                         idTriY = r.p[k].t[l].ID;
-                        if (i != k) {
+
+                        /*============================================================================================//
+                         6. La visibilidad de un triángulo con respecto a otro, para el caso en cuestión, se dará en
+                         función que ambos triángulos no pertenezcan al mismo plano.
+                        //============================================================================================*/
+
+                        if (i != k) { // PARTE 6
                             matDist.d[idTriX][idTriY] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc); // PARTE 2
                             matTime.i[idTriX][idTriY] = int(1000 * matDist.d[idTriX][idTriY] / V_SON); // PARTE 3
                             matAngles.d[idTriX][idTriY] = r.p[k].t[l].solidAngle(r.p[i].t[j].bc); // PARTE 4
@@ -656,7 +662,7 @@ void cargarSala() {
 
         for (int i = 0; i < NumTri; i++) {
             for (int j = 0; j < NumTri; j++) {
-                matEnergia.energia[i][j] = matAngles.d[i][j] * float(matTime.i[i][j]);
+                matEnergia.energia[i][j] = matAngles.d[i][j] * float(matTime.i[i][j]); //PARTE 5
             };
         }
 
@@ -666,6 +672,23 @@ void cargarSala() {
         matEnergia.normalizar(matEnergia.maxEne());
         cout << "Grabar archivo de Energia Normalizada" << endl;
         matEnergia.grabarArchivo('N', NumTri, NumTri);
+
+        /*============================================================================================//
+         7. La energía que se transmita de manera difusa, perderá energía en función del coeficiente
+         de absorción.La energía residual se volverá a transmitir difusamente, sin pérdidas adicionales.       
+        //============================================================================================*/
+        
+        material salaMaterial;
+        salaMaterial.alfa = 0.2;
+        salaMaterial.delta = 0.5;
+
+        for (int i = 0; i < NumTri; i++) {
+            for (int j = 0; j < NumTri; j++) {
+                matEnergia.energia[i][j] = matEnergia.energia[i][j]*(1- salaMaterial.alfa)* salaMaterial.delta; //PARTE 7
+            };
+        }
+        cout << "Grabar archivo de Energia Transmitida" << endl;
+        matEnergia.grabarArchivo('T', NumTri, NumTri);
         
     }
 }
