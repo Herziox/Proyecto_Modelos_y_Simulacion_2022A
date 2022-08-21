@@ -21,11 +21,16 @@ room r;
 int NumTri = 0;
 source s;
 int N_RAYOS = 20;
-
+receptor r1;
+int durSim = 1000;
 matInt matTime; //Matriz de tiempo
 matDouble matAngles; // Matriz de angulos
 MatEnergia matEnergia; // Matriz de energia
+reflection* reflexiones;
 int N_DIV = 4;
+Vector** vis_vector;
+double** vis_modvec;
+int** vis_timacu;
 
 
 using namespace std;
@@ -38,6 +43,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 void cargarSala();
+void calcular();
 
 
 // settings
@@ -190,12 +196,13 @@ int main()
 
 
     }
+    calcular();
 
     //NUMERO DE RAYOS
-    s.createRays(N_RAYOS);
+    //s.createRays(N_RAYOS);
 
     //REFLEXIONES
-    reflection* reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS);
+    //reflection* reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS);
 
     int idRayo = 6;
     int nPunto = 0;
@@ -690,6 +697,60 @@ void cargarSala() {
         cout << "Grabar archivo de Energia Transmitida" << endl;
         matEnergia.grabarArchivo('T', NumTri, NumTri);
         
+    }
+}
+
+void calcular() {
+    double eneRay, eneRes; //Energía del rayo y energía residual;
+    r1.createTimeSamples(durSim); // receptor
+    s.eF = 100;
+    s.createRays(N_RAYOS);
+    eneRay = s.eF / s.NRAYS;
+
+    reflexiones = NULL; // reflexion
+    reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS); // trazado de rayos
+
+    matEnergia.init(NumTri, durSim); // matriz de energia /Definir en la creaciòn de la sala en nùmero de triangulos
+
+    //Definimos la primera dimension (# de rayos)
+    vis_vector = new Vector * [s.NRAYS]; // se crea un vector con todos los rayos creados.
+    vis_modvec = new double* [s.NRAYS]; // se crea un vector para cada modulo de cada rayo
+    vis_timacu = new int* [s.NRAYS]; // se crea un vector para los instantes de tiempo de cada rayo
+
+    for (int R = 0; R < s.NRAYS; R++) {
+
+        eneRes = eneRay; //Inicializo energía residual
+
+        //Definimos la segunda dimension (# de reflexiones)
+        vis_vector[R] = new Vector[reflexiones[R].N - 1]; // vectores de reflexion por cada rayo
+        vis_modvec[R] = new double[reflexiones[R].N]; // modulo de cada vector para cada reflexion
+        vis_timacu[R] = new int[reflexiones[R].N]; // tiempo acumulado de las reflexiones
+        vis_modvec[R][0] = 0.0;
+        vis_timacu[R][0] = 0;
+
+        for (int i = 0; i < reflexiones[R].N - 1; i++) { //Esto es para visualizacion/animacion
+            //Guardo el vector con la ruta de la reflexión
+            vis_vector[R][i] = reflexiones[R].r[i + 1] - reflexiones[R].r[i];
+            //Registro la distancia acumulada de las reflexiones anteriores
+            vis_modvec[R][i + 1] = vis_modvec[R][i] + reflexiones[R].d[i + 1];
+            vis_timacu[R][i + 1] = int((1000 * vis_modvec[R][i + 1] / V_SON));
+
+        }
+
+        //Captación en receptor de reflexiones especulares y carga de la matriz de energia difusa
+        for (int i = 1; i < reflexiones[R].N; i++) {
+            int indTri, indTim; //Indices para la matriz de energìa difusa (transición de energía)
+            indTim = vis_timacu[R][i]; // recupero el tiempo para las reflexiones del rayo
+            indTri = reflexiones[R].idTriangle[i]; // recupero el indice del triangulo en el que rebota.
+
+            double alfa, delta; //Coeficientes de absorción y difusión
+            alfa = 0.2;
+            delta = 0.15;
+
+            matEnergia.energia[indTri][indTim] += (eneRes * (1 - alfa) * delta); //Carga de matriz energia difusa // PARTE 7
+            r1.receptionRayTracing(reflexiones[R].r[i - 1], vis_vector[R][i - 1], vis_timacu[R][i], r.maxd, eneRes); //Captación del receptor energia especular //PARTE 8
+            eneRes = eneRes * (1 - alfa) * (1 - delta); // nueva energia que se va a transmitir en la nueva reflexion
+        }
     }
 }
 
