@@ -684,18 +684,18 @@ void cargarSala() {
                         idTri2 = r.p[k].t[l].ID;
 
                         if (i != k) { // PARTE 6
-                            matRoomDist.d[idTri1][idTri2] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc); // PARTE 2
-                            matRoomTime.i[idTri1][idTri2] = int(1000 * matRoomDist.d[idTri1][idTri2] / V_SON); // PARTE 3
-                            matRoomAngles.d[idTri1][idTri2] = r.p[k].t[l].solidAngle(r.p[i].t[j].bc); // PARTE 4
+                            matRoomDist.d[idTri1][idTri2] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc); //Cálculo de la distancia de baricentro de los triangulos de la sala hacia otro triangulo de la sala NO coplanar
+                            matRoomTime.i[idTri1][idTri2] = int(1000 * matRoomDist.d[idTri1][idTri2] / V_SON); // Cálculo de la distancia de baricentro de los triangulos de la sala hacia otro triangulo de la sala NO coplanar
+                            matRoomAngles.d[idTri1][idTri2] = r.p[k].t[l].solidAngle(r.p[i].t[j].bc); // Cálculo de la distancia de baricentro de los triangulos de la sala hacia otro triangulo de la sala NO coplanar
                             areaT[idTri1] += matRoomAngles.d[idTri1][idTri2];
                         }
                     }
                 }
                 // Cálculo de las distancias, tiempo de vuelo y porcentajes de receptores
                 for (int m = 0; m < r.NR; m++) {
-                    matRecDist.d[m][idTri1] = r.r[m].p.distancia(r.p[i].t[j].bc);
-                    matRecTime.i[m][idTri1] = int(1000 * matRecDist.d[m][idTri1] / V_SON);
-                    matRecAngles.d[m][idTri1] = r.r[m].solidAngle(r.p[i].t[j].bc);
+                    matRecDist.d[m][idTri1] = r.r[m].p.distancia(r.p[i].t[j].bc); //Cálculo de la distancia de la posición del receptor al baricentro de los triangulosde la sala
+                    matRecTime.i[m][idTri1] = int(1000 * matRecDist.d[m][idTri1] / V_SON); //Cálculo del tiempo de vuelo entre el receptor y el baricentro de los triangulos de la sala
+                    matRecAngles.d[m][idTri1] = r.r[m].solidAngle(r.p[i].t[j].bc); // Cálculo del ángulo solido entre el receptor y el baricentro de los triangulos de la sala
                 }
 
             }
@@ -705,14 +705,14 @@ void cargarSala() {
         //Sala
         for (int i = 0; i < NumTri; i++) {
             for (int j = 0; j< NumTri; j++) {
-                matRoomAngles.d[i][j] = matRoomAngles.d[i][j]/areaT[i];
+                matRoomAngles.d[i][j] = matRoomAngles.d[i][j]/areaT[i]; //Normalización de de ángulos solidos de la Sala
             };
         }
 
         //Receptores
         for (int i = 0; i < N_REC; i++) {
             for (int j = 0; j < NumTri; j++) {
-                matRecAngles.d[i][j] = matRecAngles.d[i][j] / areaT[j];
+                matRecAngles.d[i][j] = matRecAngles.d[i][j] / areaT[j]; //Normalización de de ángulos solidos de los receptores
             };
         }
 
@@ -740,21 +740,24 @@ void cargarSala() {
 void calcular() {
     double eneRay, eneRes; //Energía del rayo y energía residual;
     int t_vuelo = 0; // Tiempo de vuelo del rayo
+
     for (int i = 0; i < r.NR; i++) {
-        r.r[i].createTimeSamples(DUR_SIM);
+        r.r[i].createTimeSamples(DUR_SIM); // Muestras de tiempo para cada uno de los receptores
     }
     s.eF = 100;
     s.createRays(N_RAYOS);
 
-    eneRay = s.eF / s.NRAYS;
-    double alfa, delta; //Coeficientes de absorción y difusión
+    eneRay = s.eF / s.NRAYS; // Energía Inicial
+
+    //Coeficientes de absorción y difusión
+    double alfa, delta; 
     alfa = 0.2;
     delta = 0.15;
 
     reflexiones = NULL; // reflexion
     reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS); // trazado de rayos
 
-    matEnergia.init(NumTri, durSim); // matriz de energia /Definir en la creaciòn de la sala en nùmero de triangulos
+    matEnergia.init(NumTri, durSim); // matriz de energia /Definir en la creación de la sala en número de triangulos
 
     //Definimos la primera dimension (# de rayos)
     vis_vector = new Vector * [s.NRAYS]; // se crea un vector con todos los rayos creados.
@@ -768,7 +771,7 @@ void calcular() {
         //Definimos la segunda dimension (# de reflexiones)
         vis_vector[R] = new Vector[reflexiones[R].N - 1]; // vectores de reflexion por cada rayo
         vis_modvec[R] = new double[reflexiones[R].N]; // modulo de cada vector para cada reflexion
-        vis_timacu[R] = new int[reflexiones[R].N]; // tiempo acumulado de las reflexiones
+        vis_timacu[R] = new int[reflexiones[R].N]; // tiempo  de las reflexiones
         vis_modvec[R][0] = 0.0;
         vis_timacu[R][0] = 0;
 
@@ -779,7 +782,6 @@ void calcular() {
             vis_modvec[R][i + 1] = vis_modvec[R][i] + reflexiones[R].d[i + 1];
             //Tiempo acumulado
             vis_timacu[R][i + 1] = int((1000 * vis_modvec[R][i + 1] / V_SON));
-
         }
 
         //Captación en receptor de reflexiones especulares y carga de la matriz de energia difusa
