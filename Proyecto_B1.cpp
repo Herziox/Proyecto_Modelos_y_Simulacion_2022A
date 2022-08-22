@@ -640,7 +640,6 @@ void cargarSala() {
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 for (int k = -1; k < 2; k++) {
-                    cout << i << " " << j << " " << k << endl;
                     r.r[cont_rec].p.x = i;
                     r.r[cont_rec].p.y = j;
                     r.r[cont_rec].p.z = k;
@@ -649,7 +648,7 @@ void cargarSala() {
             }
         }
 
-        // Creación de matrices de tiempo, distancia y ángulos sólidos para la sala y receptores
+        // Creación de matrices de tiempo, distancia y porcentajes para la sala y receptores
 
         NumTri = cont_t;
 
@@ -661,7 +660,7 @@ void cargarSala() {
         matRecDist.init(N_REC, NumTri);
         matRecAngles.init(N_REC, NumTri);
 
-        //Arreglo
+        //Arreglo suma de area total ( esto servira obtener el porcentaje de energia)
         double* areaT;
         areaT = NULL;
         areaT = new double[NumTri];
@@ -684,8 +683,6 @@ void cargarSala() {
                         // TRIANGULO 2
                         idTri2 = r.p[k].t[l].ID;
 
-                        
-
                         if (i != k) { // PARTE 6
                             matRoomDist.d[idTri1][idTri2] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc); // PARTE 2
                             matRoomTime.i[idTri1][idTri2] = int(1000 * matRoomDist.d[idTri1][idTri2] / V_SON); // PARTE 3
@@ -705,12 +702,14 @@ void cargarSala() {
         }
 
         // MATRIZ DE PORCENTAJES
+        //Sala
         for (int i = 0; i < NumTri; i++) {
             for (int j = 0; j< NumTri; j++) {
                 matRoomAngles.d[i][j] = matRoomAngles.d[i][j]/areaT[i];
             };
         }
 
+        //Receptores
         for (int i = 0; i < N_REC; i++) {
             for (int j = 0; j < NumTri; j++) {
                 matRecAngles.d[i][j] = matRecAngles.d[i][j] / areaT[j];
@@ -718,6 +717,7 @@ void cargarSala() {
         }
 
       
+        //Guardar archivos de Sala
         cout << "Grabar archivo de Distancia Triangulos Room" << endl;
         matRoomDist.grabarArchivo('d', NumTri);
         cout << "Grabar archivo de Tiempo Triangulos Room" << endl;
@@ -725,7 +725,7 @@ void cargarSala() {
         cout << "Grabar archivo de Porcentajes Triangulos Room" << endl;
         matRoomAngles.grabarArchivo('p', NumTri);
 
-
+        //Guardar archivos de Receptor
         cout << "Grabar archivo de Distancia Triangulos Receptor" << endl;
         matRecDist.grabarArchivo('D', N_REC);
         cout << "Grabar archivo de Tiempo Triangulos Receptor" << endl;
@@ -777,6 +777,7 @@ void calcular() {
             vis_vector[R][i] = reflexiones[R].r[i + 1] - reflexiones[R].r[i];
             //Registro la distancia acumulada de las reflexiones anteriores
             vis_modvec[R][i + 1] = vis_modvec[R][i] + reflexiones[R].d[i + 1];
+            //Tiempo acumulado
             vis_timacu[R][i + 1] = int((1000 * vis_modvec[R][i + 1] / V_SON));
 
         }
@@ -788,42 +789,49 @@ void calcular() {
             indTri = reflexiones[R].idTriangle[i]; // recupero el indice del triangulo en el que rebota.
 
 
-            matEnergia.energia[indTri][indTim] += (eneRes * (1 - alfa) * delta); //Carga de matriz energia difusa // PARTE 5
+            matEnergia.energia[indTri][indTim] += (eneRes * (1 - alfa) * delta); //Carga de matriz energia difusa // PARTE 7
             for (int j = 0; j < r.NR; j++) {
-                r.r[j].receptionRayTracing(reflexiones[R].r[i - 1], vis_vector[R][i - 1], vis_timacu[R][i], r.maxd, eneRes); //Captación del receptor energia especular //PARTE 8
-
+                r.r[j].receptionRayTracing(reflexiones[R].r[i - 1], vis_vector[R][i - 1], vis_timacu[R][i], r.maxd, eneRes); //Captación del receptor energia especular 
             }
             eneRes = eneRes * (1 - alfa) * (1 - delta); // nueva energia que se va a transmitir en la nueva reflexion
         }
     }
 
-    for (int t_sim = 0; t_sim < DUR_SIM; t_sim++) {
-        for (int i = 0; i < NumTri; i++) {
-            for (int j = 0; j < NumTri; j++) {
-                t_vuelo = t_sim + matRoomTime.i[i][j];
+    //Distribución de energía
+    for (int t_sim = 0; t_sim < DUR_SIM; t_sim++) {// Instancia de tiempo     
 
-                if (t_vuelo < DUR_SIM) {
-                    matEnergia.energia[j][t_vuelo] += (matEnergia.energia[i][t_sim] * matRoomAngles.d[i][j]) * (1 - alfa) * delta; //PARTE 7
-                }
-                
+        for (int i = 0; i < NumTri; i++) {// Triángulo 1
+            
+            //Energía de la Sala
+            for (int j = 0; j < NumTri; j++) {
+                // Triángulo 2
+
+                t_vuelo = t_sim + matRoomTime.i[i][j];
+                if (t_vuelo < DUR_SIM) {//PARTE 9
+                    matEnergia.energia[j][t_vuelo] += (matEnergia.energia[i][t_sim] * matRoomAngles.d[i][j]) * (1 - alfa); //PARTE 8
+                }   
             };
 
+            //Energía del Receptor
             for (int k = 0; k < r.NR; k++) {
-                t_vuelo = t_sim + matRecTime.i[k][i];
-                
-                if (t_vuelo < DUR_SIM) {
-                    r.r[k].eR[t_vuelo] +=  (matEnergia.energia[i][t_sim] * matRoomAngles.d[k][i]); //PARTE 7
+                t_vuelo = t_sim + matRecTime.i[k][i];      
+                if (t_vuelo < DUR_SIM) { //PARTE 9
+                    r.r[k].eR[t_vuelo] +=  (matEnergia.energia[i][t_sim] * matRoomAngles.d[k][i]); //PARTE 8
                 }
-
             };
         }
     }
 
+    //Guardar la información de la energía de la sala
+    cout << "Grabar archivo de Energia" << endl;
+    matEnergia.grabarArchivo('e', s.NRAYS, NumTri);
+
+    //Guardar la información de la energía de cada receptor
     for (int i = 0; i < r.NR; i++) {
         r.r[i].grabarArchivo();
     }
-    cout << "Grabar archivo de Energia" << endl;
-    matEnergia.grabarArchivo('e', s.NRAYS, NumTri);
+
+    
 }
 
 
