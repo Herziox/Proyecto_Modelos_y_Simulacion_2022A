@@ -23,14 +23,23 @@ source s;
 int N_RAYOS = 20;
 receptor r1;
 int durSim = 1000;
-matInt matTime; //Matriz de tiempo
-matDouble matAngles; // Matriz de angulos
+matInt matRoomTime; //Matriz de tiempo de Triangulos de la sala
+matDouble matRoomDist; //Matriz de distancia de Triangulos de la sala
+matDouble matRoomAngles; // Matriz de angulos de Triangulos de la sala
+
+matInt matRecTime; //Matriz de tiempo de Triangulos del receptor
+matDouble matRecDist; //Matriz de distancia de Triangulos del receptor
+matDouble matRecAngles; // Matriz de angulos de Triangulos del receptor
+
+
+
 MatEnergia matEnergia; // Matriz de energia
 reflection* reflexiones;
 int N_DIV = 4;
 Vector** vis_vector;
 double** vis_modvec;
 int** vis_timacu;
+
 
 
 using namespace std;
@@ -579,8 +588,8 @@ void cargarSala() {
          número de triángulos de la sala.      
         //============================================================================================*/
         
-        matDouble matDist; //Matriz de distancia
-        matDist.init(NumTri, NumTri);
+        
+        matRoomDist.init(NumTri, NumTri);
 
         /*============================================================================================//
          3. Calcule todos los “tiempos de vuelo” en milisegundos que demorarían las reflexiones difusas
@@ -588,7 +597,7 @@ void cargarSala() {
          visibles) considerando una velocidad de transmisión de 340 m/s (constante V_SON). Dichos 
          tiempos también deberán ser almacenados en una matriz “tiempo” de tipo int de n×n elementos.
         //============================================================================================*/
-        matTime.init(NumTri, NumTri);
+        matRoomTime.init(NumTri, NumTri);
 
         /*============================================================================================//
          4. Calcule el porcentaje de la energía que será enviada a cada triángulo, considerando el 
@@ -597,28 +606,50 @@ void cargarSala() {
          en una matriz “porcentaje” de tipo double de n×n elementos
         //============================================================================================*/
 
-        matAngles.init(NumTri, NumTri);
+        matRoomAngles.init(NumTri, NumTri);
 
         double* areaT;
         areaT = NULL;
         areaT = new double[NumTri];
-        int idTriX = 0;
-        int idTriY = 0;
+        int idTri1 = 0;
+        int idTri2 = 0;
 
         for (int i = 0; i < NumTri; i++) {
             areaT[i] = 0.0;
         }
 
+        // CREACIÓN DE RECEPTORES 
+        r.NewReceptor(N_REC);
+        int cont_rec = 0;
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                for (int k = -1; k < 2; k++) {
+                    r.r[cont_rec].p.x = i;
+                    r.r[cont_rec].p.x = j;
+                    r.r[cont_rec].p.x = k;
+                    cont_rec++;
+                }
+            }
+        }
+
+        // CREACIÓN DE MATRICES DE TIEMPO, DISTANCIA Y ÁNGULOS SÓLIDOS
+
+        matRecTime.init(N_REC, NumTri);
+        matRecDist.init(N_REC, NumTri);
+        matRecAngles.init(N_REC, NumTri);
+
+
+        //CALCULO DE DISTANCIAS, TIEMPO DE VUELO Y PORCENTAJES
         for (int i = 0; i < r.NP; i++) {
 
             for (int j = 0; j < r.p[i].NT; j++) {
-               // Triangulo 1
+               // TRIANGULO 1
+                idTri1 = r.p[i].t[j].ID;
                 for (int k = 0; k < r.NP; k++) {
 
                     for (int l = 0; l < r.p[k].NT; l++) {
-                        // Triangulo 2
-                        idTriX = r.p[i].t[j].ID;
-                        idTriY = r.p[k].t[l].ID;
+                        // TRIANGULO 2
+                        idTri2 = r.p[k].t[l].ID;
 
                         /*============================================================================================//
                          6. La visibilidad de un triángulo con respecto a otro, para el caso en cuestión, se dará en
@@ -626,50 +657,65 @@ void cargarSala() {
                         //============================================================================================*/
 
                         if (i != k) { // PARTE 6
-                            matDist.d[idTriX][idTriY] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc); // PARTE 2
-                            matTime.i[idTriX][idTriY] = int(1000 * matDist.d[idTriX][idTriY] / V_SON); // PARTE 3
-                            matAngles.d[idTriX][idTriY] = r.p[k].t[l].solidAngle(r.p[i].t[j].bc); // PARTE 4
-                            areaT[idTriX] += matAngles.d[idTriX][idTriY];
-                        }
-                        else {
-                            matDist.d[idTriX][idTriY] = 0.0;
-                            matTime.i[idTriX][idTriY] = 0;
-                            matAngles.d[idTriX][idTriY] = 0.0;
+                            matRoomDist.d[idTri1][idTri2] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc); // PARTE 2
+                            matRoomTime.i[idTri1][idTri2] = int(1000 * matRoomDist.d[idTri1][idTri2] / V_SON); // PARTE 3
+                            matRoomAngles.d[idTri1][idTri2] = r.p[k].t[l].solidAngle(r.p[i].t[j].bc); // PARTE 4
+                            areaT[idTri1] += matRoomAngles.d[idTri1][idTri2];
                         }
                     }
+                }
+                // Cálculo de las distancias, tiempo de vuelo y porcentajes de receptores
+                for (int m = 0; m < r.NR; m++) {
+                    matRecDist.d[m][idTri1] = r.r[m].p.distancia(r.p[i].t[j].bc);
+                    matRecTime.i[m][idTri1] = int(1000 * matRecDist.d[m][idTri1] / V_SON);
+                    matRecAngles.d[m][idTri1] = r.r[m].solidAngle(r.p[i].t[j].bc);
                 }
 
             }
         }
 
+        // MATRIZ DE PORCENTAJES
         for (int i = 0; i < NumTri; i++) {
             for (int j = 0; j< NumTri; j++) {
-                matAngles.d[i][j] = matAngles.d[i][j]/areaT[i];
+                matRoomAngles.d[i][j] = matRoomAngles.d[i][j]/areaT[i];
             };
         }
 
-      
-        cout << "Grabar archivo de Distancia" << endl;
-        matDist.grabarArchivo('d', NumTri);
-        cout << "Grabar archivo de Tiempo" << endl;
-        matTime.grabarArchivo('t', NumTri);
-        cout << "Grabar archivo de Porcentajes" << endl;
-        matAngles.grabarArchivo('p', NumTri);
+        for (int i = 0; i < N_REC; i++) {
+            for (int j = 0; j < NumTri; j++) {
+                matRecAngles.d[i][j] = matRecAngles.d[i][j] / areaT[j];
+            };
+        }
 
-        /*============================================================================================//
-         5. Distribuya la energía difusa según la matriz “porcentaje” entre todos los triángulos que
-         sean visibles entre sí, respetando el tiempo de vuelo/desplazamiento dado por la matriz
-         “tiempo”.  Para registrar este cálculo, actualice la matriz energía, mE, (espacio/tiempo)
-         según corresponda. 
-        //============================================================================================*/
 
         
+
+
+      
+        cout << "Grabar archivo de Distancia Triangulos Room" << endl;
+        matRoomDist.grabarArchivo('d', NumTri);
+        cout << "Grabar archivo de Tiempo Triangulos Room" << endl;
+        matRoomTime.grabarArchivo('t', NumTri);
+        cout << "Grabar archivo de Porcentajes Triangulos Room" << endl;
+        matRoomAngles.grabarArchivo('p', NumTri);
+
+
+        cout << "Grabar archivo de Distancia Triangulos Receptor" << endl;
+        matRoomDist.grabarArchivo('D', NumTri);
+        cout << "Grabar archivo de Tiempo Triangulos Receptor" << endl;
+        matRoomTime.grabarArchivo('T', NumTri);
+        cout << "Grabar archivo de Porcentajes Triangulos Receptor" << endl;
+        matRoomAngles.grabarArchivo('P', NumTri);
+
+        
+
+        /*
         matEnergia.init(NumTri, NumTri);
         
 
         for (int i = 0; i < NumTri; i++) {
             for (int j = 0; j < NumTri; j++) {
-                matEnergia.energia[i][j] = matAngles.d[i][j] * float(matTime.i[i][j]); //PARTE 5
+                matEnergia.energia[i][j] = matRoomAngles.d[i][j] * float(matRoomTime.i[i][j]); //PARTE 5
             };
         }
 
@@ -680,10 +726,10 @@ void cargarSala() {
         cout << "Grabar archivo de Energia Normalizada" << endl;
         matEnergia.grabarArchivo('N', NumTri, NumTri);
 
-        /*============================================================================================//
+        ============================================================================================//
          7. La energía que se transmita de manera difusa, perderá energía en función del coeficiente
          de absorción.La energía residual se volverá a transmitir difusamente, sin pérdidas adicionales.       
-        //============================================================================================*/
+        //============================================================================================
         
         material salaMaterial;
         salaMaterial.alfa = 0.2;
@@ -696,16 +742,23 @@ void cargarSala() {
         }
         cout << "Grabar archivo de Energia Transmitida" << endl;
         matEnergia.grabarArchivo('T', NumTri, NumTri);
-        
+        */
     }
 }
 
 void calcular() {
     double eneRay, eneRes; //Energía del rayo y energía residual;
-    r1.createTimeSamples(durSim); // receptor
+    int t_vuelo = 0; // Tiempo de vuelo del rayo
+    for (int i = 0; i < r.NR; i++) {
+        r.r[i].createTimeSamples(DUR_SIM);
+    }
     s.eF = 100;
     s.createRays(N_RAYOS);
+
     eneRay = s.eF / s.NRAYS;
+    double alfa, delta; //Coeficientes de absorción y difusión
+    alfa = 0.2;
+    delta = 0.15;
 
     reflexiones = NULL; // reflexion
     reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS); // trazado de rayos
@@ -728,7 +781,7 @@ void calcular() {
         vis_modvec[R][0] = 0.0;
         vis_timacu[R][0] = 0;
 
-        for (int i = 0; i < reflexiones[R].N - 1; i++) { //Esto es para visualizacion/animacion
+        for (int i = 0; i < reflexiones[R].N - 1; i++) { 
             //Guardo el vector con la ruta de la reflexión
             vis_vector[R][i] = reflexiones[R].r[i + 1] - reflexiones[R].r[i];
             //Registro la distancia acumulada de las reflexiones anteriores
@@ -743,15 +796,53 @@ void calcular() {
             indTim = vis_timacu[R][i]; // recupero el tiempo para las reflexiones del rayo
             indTri = reflexiones[R].idTriangle[i]; // recupero el indice del triangulo en el que rebota.
 
-            double alfa, delta; //Coeficientes de absorción y difusión
-            alfa = 0.2;
-            delta = 0.15;
+            /*============================================================================================//
+                5. Distribuya la energía difusa según la matriz “porcentaje” entre todos los triángulos que
+                sean visibles entre sí, respetando el tiempo de vuelo/desplazamiento dado por la matriz
+                “tiempo”.  Para registrar este cálculo, actualice la matriz energía, mE, (espacio/tiempo)
+                según corresponda.
+            //============================================================================================*/
 
-            matEnergia.energia[indTri][indTim] += (eneRes * (1 - alfa) * delta); //Carga de matriz energia difusa // PARTE 7
-            r1.receptionRayTracing(reflexiones[R].r[i - 1], vis_vector[R][i - 1], vis_timacu[R][i], r.maxd, eneRes); //Captación del receptor energia especular //PARTE 8
+            matEnergia.energia[indTri][indTim] += (eneRes * (1 - alfa) * delta); //Carga de matriz energia difusa // PARTE 5
+            for (int j = 0; j < r.NR; j++) {
+                r.r[j].receptionRayTracing(reflexiones[R].r[i - 1], vis_vector[R][i - 1], vis_timacu[R][i], r.maxd, eneRes); //Captación del receptor energia especular //PARTE 8
+
+            }
             eneRes = eneRes * (1 - alfa) * (1 - delta); // nueva energia que se va a transmitir en la nueva reflexion
         }
     }
+
+    for (int t_sim = 0; t_sim < DUR_SIM; t_sim++) {
+        for (int i = 0; i < NumTri; i++) {
+            for (int j = 0; j < NumTri; j++) {
+                t_vuelo = t_sim + matRoomTime.i[i][j];
+                /*============================================================================================//
+                    9.	La duración de la transición de energía no debe sobrepasar 1 segundo.
+                //============================================================================================*/
+                if (t_vuelo < DUR_SIM) {
+                    matEnergia.energia[j][t_vuelo] += (matEnergia.energia[i][t_sim] * matRoomAngles.d[i][j]) * (1 - alfa) * delta; //PARTE 7
+                }
+                
+            };
+
+            for (int k = 0; k < r.NR; k++) {
+                t_vuelo = t_sim + matRecTime.i[k][i];
+                /*============================================================================================//
+                    9.	La duración de la transición de energía no debe sobrepasar 1 segundo.
+                //============================================================================================*/
+                if (t_vuelo < DUR_SIM) {
+                    r.r[k].eR[t_vuelo] +=  (matEnergia.energia[i][t_sim] * matRoomAngles.d[k][i]); //PARTE 7
+                }
+
+            };
+        }
+    }
+
+    for (int i = 0; i < r.NR; i++) {
+        r.r[i].grabarArchivo();
+    }
+    cout << "Grabar archivo de Energia" << endl;
+    matEnergia.grabarArchivo('e', s.NRAYS, NumTri);
 }
 
 

@@ -20,7 +20,9 @@
 #define MaxNPoints              200     //maximum Number of points
 #define MaxNSelectedPlanes      2000    //1000//maximum Number of selected planes
 #define MaxNChar                50      //maximum Number of characteres
-#define MAXDOUBLE 1000000
+#define MAXDOUBLE               1000000
+#define N_REC                   27
+#define DUR_SIM                  1000
 //---------------------------------------------------------------------------
 
 
