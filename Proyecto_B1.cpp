@@ -456,7 +456,62 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 }
 //================================================================================================================================================
 
+
+/*============================================================================================//
+    1.Calcule el centroide de todos los triángulos de la sala.
+//============================================================================================*/
+
+/*============================================================================================//
+    2. Genere una matriz de tipo double que almacene la distancia que existe entre los centros de
+    los diferentes triángulos de la sala.Está matriz tendrá una dimensión de n×n donde n será el
+    número de triángulos de la sala.
+//============================================================================================*/
+
+/*============================================================================================//
+     3. Calcule todos los “tiempos de vuelo” en milisegundos que demorarían las reflexiones difusas
+     para llegar de un centroide a otro (entre todos los triángulos que apliquen, es decir que sean
+     visibles) considerando una velocidad de transmisión de 340 m/s (constante V_SON). Dichos
+     tiempos también deberán ser almacenados en una matriz “tiempo” de tipo int de n×n elementos.
+//============================================================================================*/
+
+/*============================================================================================//
+     4. Calcule el porcentaje de la energía que será enviada a cada triángulo, considerando el
+     ángulo sólido (área de triángulo proyectado a una distancia de 0.2) entre todos los triángulos
+     visibles desde el punto de partida (centroide). Estos porcentajes también deberán almacenarse
+     en una matriz “porcentaje” de tipo double de n×n elementos
+//============================================================================================*/
+
+/*============================================================================================//
+    5. Distribuya la energía difusa según la matriz “porcentaje” entre todos los triángulos que
+    sean visibles entre sí, respetando el tiempo de vuelo/desplazamiento dado por la matriz
+    “tiempo”.  Para registrar este cálculo, actualice la matriz energía, mE, (espacio/tiempo)
+    según corresponda.
+//============================================================================================*/
+
+/*============================================================================================//
+    6. La visibilidad de un triángulo con respecto a otro, para el caso en cuestión, se dará en
+    función que ambos triángulos no pertenezcan al mismo plano.
+//============================================================================================*/
+
+/*============================================================================================//
+    7. La energía que se transmita de manera difusa, perderá energía en función del coeficiente
+    de absorción.La energía residual se volverá a transmitir difusamente, sin pérdidas adicionales.
+//============================================================================================*/
+
+ /*============================================================================================//
+    8.	En cada transición, se debe transmitir energía al(a los) receptor(es).El porcentaje
+        será dado en función del área de un disco proyectado a 0.2 del centroide del triángulo.
+        Para esto también es necesario tener el tiempo de vuelo entre los triángulos
+        y los receptores.Utilice vectores o matrices para pre calcular estos datos.
+//============================================================================================*/
+
+/*============================================================================================//
+    9.	La duración de la transición de energía no debe sobrepasar 1 segundo.
+//============================================================================================*/
+
+
 void cargarSala() {
+    // CREACIÓN DE LA SALA
     if (!salaCargada) {
 
         r.NewPlanes(6);
@@ -566,9 +621,7 @@ void cargarSala() {
         //r.p[5].PointGenTriangle(); //Actualizar
         r.p[5].MoreTriangle(N_DIV);
 
-        /*============================================================================================//
-         1.Calcule el centroide de todos los triángulos de la sala.
-        //============================================================================================*/
+        // Creación de baricentros de triángulos de los planos de la sala  [PARTE 1]
         int cont_t = 0;
         for (int i = 0; i < r.NP; i++) {
             r.p[i].n = NormalPlano(r.p[i]);
@@ -580,34 +633,35 @@ void cargarSala() {
             }
         }
 
+
+        // CREACIÓN DE RECEPTORES 
+        r.NewReceptor(N_REC);
+        int cont_rec = 0;
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                for (int k = -1; k < 2; k++) {
+                    cout << i << " " << j << " " << k << endl;
+                    r.r[cont_rec].p.x = i;
+                    r.r[cont_rec].p.y = j;
+                    r.r[cont_rec].p.z = k;
+                    cont_rec++;
+                }
+            }
+        }
+
+        // Creación de matrices de tiempo, distancia y ángulos sólidos para la sala y receptores
+
         NumTri = cont_t;
 
-        /*============================================================================================//
-         2. Genere una matriz de tipo double que almacene la distancia que existe entre los centros de 
-         los diferentes triángulos de la sala.Está matriz tendrá una dimensión de n×n donde n será el 
-         número de triángulos de la sala.      
-        //============================================================================================*/
-        
-        
-        matRoomDist.init(NumTri, NumTri);
+        matRoomDist.init(NumTri, NumTri); //[PARTE 2]
+        matRoomTime.init(NumTri, NumTri); //[PARTE 3]
+        matRoomAngles.init(NumTri, NumTri); //[PARTE 4]       
 
-        /*============================================================================================//
-         3. Calcule todos los “tiempos de vuelo” en milisegundos que demorarían las reflexiones difusas
-         para llegar de un centroide a otro (entre todos los triángulos que apliquen, es decir que sean
-         visibles) considerando una velocidad de transmisión de 340 m/s (constante V_SON). Dichos 
-         tiempos también deberán ser almacenados en una matriz “tiempo” de tipo int de n×n elementos.
-        //============================================================================================*/
-        matRoomTime.init(NumTri, NumTri);
+        matRecTime.init(N_REC, NumTri);
+        matRecDist.init(N_REC, NumTri);
+        matRecAngles.init(N_REC, NumTri);
 
-        /*============================================================================================//
-         4. Calcule el porcentaje de la energía que será enviada a cada triángulo, considerando el 
-         ángulo sólido (área de triángulo proyectado a una distancia de 0.2) entre todos los triángulos
-         visibles desde el punto de partida (centroide). Estos porcentajes también deberán almacenarse
-         en una matriz “porcentaje” de tipo double de n×n elementos
-        //============================================================================================*/
-
-        matRoomAngles.init(NumTri, NumTri);
-
+        //Arreglo
         double* areaT;
         areaT = NULL;
         areaT = new double[NumTri];
@@ -617,27 +671,6 @@ void cargarSala() {
         for (int i = 0; i < NumTri; i++) {
             areaT[i] = 0.0;
         }
-
-        // CREACIÓN DE RECEPTORES 
-        r.NewReceptor(N_REC);
-        int cont_rec = 0;
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                for (int k = -1; k < 2; k++) {
-                    r.r[cont_rec].p.x = i;
-                    r.r[cont_rec].p.x = j;
-                    r.r[cont_rec].p.x = k;
-                    cont_rec++;
-                }
-            }
-        }
-
-        // CREACIÓN DE MATRICES DE TIEMPO, DISTANCIA Y ÁNGULOS SÓLIDOS
-
-        matRecTime.init(N_REC, NumTri);
-        matRecDist.init(N_REC, NumTri);
-        matRecAngles.init(N_REC, NumTri);
-
 
         //CALCULO DE DISTANCIAS, TIEMPO DE VUELO Y PORCENTAJES
         for (int i = 0; i < r.NP; i++) {
@@ -651,10 +684,7 @@ void cargarSala() {
                         // TRIANGULO 2
                         idTri2 = r.p[k].t[l].ID;
 
-                        /*============================================================================================//
-                         6. La visibilidad de un triángulo con respecto a otro, para el caso en cuestión, se dará en
-                         función que ambos triángulos no pertenezcan al mismo plano.
-                        //============================================================================================*/
+                        
 
                         if (i != k) { // PARTE 6
                             matRoomDist.d[idTri1][idTri2] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc); // PARTE 2
@@ -687,10 +717,6 @@ void cargarSala() {
             };
         }
 
-
-        
-
-
       
         cout << "Grabar archivo de Distancia Triangulos Room" << endl;
         matRoomDist.grabarArchivo('d', NumTri);
@@ -701,48 +727,13 @@ void cargarSala() {
 
 
         cout << "Grabar archivo de Distancia Triangulos Receptor" << endl;
-        matRoomDist.grabarArchivo('D', NumTri);
+        matRecDist.grabarArchivo('D', N_REC);
         cout << "Grabar archivo de Tiempo Triangulos Receptor" << endl;
-        matRoomTime.grabarArchivo('T', NumTri);
+        matRecTime.grabarArchivo('T', N_REC);
         cout << "Grabar archivo de Porcentajes Triangulos Receptor" << endl;
-        matRoomAngles.grabarArchivo('P', NumTri);
+        matRecAngles.grabarArchivo('P', N_REC);
 
         
-
-        /*
-        matEnergia.init(NumTri, NumTri);
-        
-
-        for (int i = 0; i < NumTri; i++) {
-            for (int j = 0; j < NumTri; j++) {
-                matEnergia.energia[i][j] = matRoomAngles.d[i][j] * float(matRoomTime.i[i][j]); //PARTE 5
-            };
-        }
-
-        cout << "Grabar archivo de Energia" << endl;
-        matEnergia.grabarArchivo('e', NumTri, NumTri);
-
-        matEnergia.normalizar(matEnergia.maxEne());
-        cout << "Grabar archivo de Energia Normalizada" << endl;
-        matEnergia.grabarArchivo('N', NumTri, NumTri);
-
-        ============================================================================================//
-         7. La energía que se transmita de manera difusa, perderá energía en función del coeficiente
-         de absorción.La energía residual se volverá a transmitir difusamente, sin pérdidas adicionales.       
-        //============================================================================================
-        
-        material salaMaterial;
-        salaMaterial.alfa = 0.2;
-        salaMaterial.delta = 0.5;
-
-        for (int i = 0; i < NumTri; i++) {
-            for (int j = 0; j < NumTri; j++) {
-                matEnergia.energia[i][j] = matEnergia.energia[i][j]*(1- salaMaterial.alfa)* salaMaterial.delta; //PARTE 7
-            };
-        }
-        cout << "Grabar archivo de Energia Transmitida" << endl;
-        matEnergia.grabarArchivo('T', NumTri, NumTri);
-        */
     }
 }
 
@@ -796,12 +787,6 @@ void calcular() {
             indTim = vis_timacu[R][i]; // recupero el tiempo para las reflexiones del rayo
             indTri = reflexiones[R].idTriangle[i]; // recupero el indice del triangulo en el que rebota.
 
-            /*============================================================================================//
-                5. Distribuya la energía difusa según la matriz “porcentaje” entre todos los triángulos que
-                sean visibles entre sí, respetando el tiempo de vuelo/desplazamiento dado por la matriz
-                “tiempo”.  Para registrar este cálculo, actualice la matriz energía, mE, (espacio/tiempo)
-                según corresponda.
-            //============================================================================================*/
 
             matEnergia.energia[indTri][indTim] += (eneRes * (1 - alfa) * delta); //Carga de matriz energia difusa // PARTE 5
             for (int j = 0; j < r.NR; j++) {
@@ -816,9 +801,7 @@ void calcular() {
         for (int i = 0; i < NumTri; i++) {
             for (int j = 0; j < NumTri; j++) {
                 t_vuelo = t_sim + matRoomTime.i[i][j];
-                /*============================================================================================//
-                    9.	La duración de la transición de energía no debe sobrepasar 1 segundo.
-                //============================================================================================*/
+
                 if (t_vuelo < DUR_SIM) {
                     matEnergia.energia[j][t_vuelo] += (matEnergia.energia[i][t_sim] * matRoomAngles.d[i][j]) * (1 - alfa) * delta; //PARTE 7
                 }
@@ -827,9 +810,7 @@ void calcular() {
 
             for (int k = 0; k < r.NR; k++) {
                 t_vuelo = t_sim + matRecTime.i[k][i];
-                /*============================================================================================//
-                    9.	La duración de la transición de energía no debe sobrepasar 1 segundo.
-                //============================================================================================*/
+                
                 if (t_vuelo < DUR_SIM) {
                     r.r[k].eR[t_vuelo] +=  (matEnergia.energia[i][t_sim] * matRoomAngles.d[k][i]); //PARTE 7
                 }
