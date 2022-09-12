@@ -287,7 +287,7 @@ int main()
 
     // render loop
     // -----------
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(window) && false)
     {
 
 
@@ -632,6 +632,7 @@ void cargarSala() {
                 cont_t++;
             }
         }
+        cout << "Triangulos: " << cont_t <<endl ;
 
 
         // CREACIÓN DE RECEPTORES 
@@ -808,6 +809,7 @@ void calcular() {
             for (int j = 0; j < NumTri; j++) {
                 // Triángulo 2
 
+                //Es el instante de tiempo de la simulacion + el instate de  tiempo en que ocurre la transmision de energia en ese triangulo a hacia el siguiente
                 t_vuelo = t_sim + matRoomTime.i[i][j];
                 if (t_vuelo < DUR_SIM) {//PARTE 9
                     matEnergia.energia[j][t_vuelo] += (matEnergia.energia[i][t_sim] * matRoomAngles.d[i][j]) * (1 - alfa); //PARTE 8
